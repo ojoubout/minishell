@@ -28,36 +28,40 @@
 
 typedef struct  s_minishell
 { 
-    int return_code;
-    int stat;
-    char *command_line;
-    int pipe[2];
+    int         return_code;
+    int         stat;
+    char        *command_line;
+    int         pipe[2];
+    t_list      *cmd_head;
+    t_list      *cmd_tail;
 }               t_minishell;
 
 typedef struct  s_command
-{ 
-    char    **argv;
+{
+    t_list  *argv;
+    // char    **argv;
     int     argc;
-    char    *outRed;
-    char    *inRed;
+    int     outRed;
+    int     inRed;
     // char    *read_next;
 }               t_command;
 
-typedef struct  s_cmd_list
-{
-    t_command   cmd;
-    t_cmd_list   *next;
-}               t_cmd_list;
+// typedef struct  s_cmd_list
+// {
+//     t_command   cmd;
+//     t_cmd_list   *next;
+// }               t_cmd_list;
 
 
 t_minishell g_minishell;
 
-void    ft_handle_cmd(char *str);
-void    ft_handle_pipe(char *str);
-void    ft_handle_input_red(char *str);
-void    ft_handle_output_red(char *str, int app);
-void    ft_error(const char *str);
 
+void        ft_handle_cmd(char *str);
+void        ft_handle_pipe(char *str);
+void        ft_handle_input_red(char *str);
+void        ft_handle_output_red(char *str, int app);
+void        ft_error(const char *str);
+t_command   *ft_new_command(int in, int out);
 
 int	ft_on_char(const char *str, int i, char *c);
 int	ft_word_length(const char *s, char *c);

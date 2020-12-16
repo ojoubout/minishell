@@ -14,16 +14,23 @@ void    ft_handle_cmd(char *str)
 {
     if (g_minishell.stat != NULL)
         ft_syntax_error(str[0]);
-    
+
 }
 
 void    ft_handle_pipe(char *str)
 {
-    t_cmd_list *item;
-
-    if (g_minishell.stat != NULL)
+    t_list *item;
+    t_command   *cmd;
+    int         p[2];
+    cmd = g_minishell.cmd_head->content;
+    if (g_minishell.stat != NULL || cmd->argv == NULL)
         ft_syntax_error(str[0]);
-    item = malloc(sizeof(t_cmd_list));
+    if (pipe(p) < 0)
+        ft_error("pipe error");
+    cmd->outRed = p[1];
+    item = ft_lstnew(ft_new_command(p[0], p[1]));
+    ft_lstadd_back(&g_minishell.cmd_head, item);
+
 }
 
 

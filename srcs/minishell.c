@@ -18,6 +18,17 @@ void    ft_error(const char *str)
     exit(1);
 }
 
+t_command   *ft_new_command(int in, int out)
+{
+    t_command   *cmd;
+
+    cmd = malloc(sizeof(t_command));
+    cmd->argc = 0;
+    cmd->inRed = in;
+    cmd->outRed = out;
+    return (cmd);
+}
+
 void    show_prompt()
 {    
     if (g_minishell.return_code)
@@ -92,6 +103,7 @@ int     main(void)
 {
     g_minishell.return_code = 0;
     g_minishell.stat = 1;
+    g_minishell.cmd_head = ft_lstnew(NULL);
     while (g_minishell.stat)
     {
         show_prompt();
