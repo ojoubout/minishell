@@ -12,7 +12,7 @@
 
 NAME=minishell
 
-SRC = srcs/minishell.c srcs/ft_sh_split.c
+SRC = srcs/minishell.c srcs/ft_sh_split.c srcs/handle_cmd.c
 SRC += gnl/get_next_line.c
 
 OBJ = $(SRC:.c=.o)

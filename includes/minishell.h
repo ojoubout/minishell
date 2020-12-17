@@ -25,15 +25,17 @@
 #define INPUT_RED "<"
 #define OUTPUT_RED ">" 
 #define APP_OUTPUT_RED ">>"
-
+#define SEP " ;|<>"
 typedef struct  s_minishell
 { 
     int         return_code;
     int         stat;
     char        *command_line;
+    int         pos;
     int         pipe[2];
     t_list      *cmd_head;
     t_list      *cmd_tail;
+    char        *read_next;
 }               t_minishell;
 
 typedef struct  s_command
@@ -56,12 +58,13 @@ typedef struct  s_command
 t_minishell g_minishell;
 
 
-void        ft_handle_cmd(char *str);
-void        ft_handle_pipe(char *str);
-void        ft_handle_input_red(char *str);
-void        ft_handle_output_red(char *str, int app);
-void        ft_error(const char *str);
+int         ft_handle_cmd(char *str);
+int         ft_handle_pipe(char *str);
+int         ft_handle_input_red(char *str);
+int         ft_handle_output_red(char *str, char *app);
+void        ft_error(char *str);
 t_command   *ft_new_command(int in, int out);
+int         ft_syntax_error(char *token);
 
 int	ft_on_char(const char *str, int i, char *c);
 int	ft_word_length(const char *s, char *c);
