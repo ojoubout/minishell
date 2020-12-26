@@ -14,6 +14,8 @@
 # define MINISHELL_H
 #include "../libft/libft.h"
 #include "../gnl/get_next_line.h"
+#include <stdio.h>
+#include <signal.h>
 
 #define BCYN "\e[1;36m"
 #define BBLU "\e[1;33m"
@@ -36,6 +38,7 @@ typedef struct  s_minishell
     t_list      *cmd_head;
     t_list      *cmd_tail;
     char        *read_next;
+    int         forked;
 }               t_minishell;
 
 typedef struct  s_command
@@ -69,6 +72,10 @@ int         ft_syntax_error(char *token);
 int	ft_on_char(const char *str, int i, char *c);
 int	ft_word_length(const char *s, char *c);
 char		**ft_sh_split(char const *s, char *c);
+void    print_commands();
+void    execute_commands();
+void    handle_sigint(int sig);
+void    show_prompt();
 
 // char	**ft_free(char **ptr, size_t size);
 

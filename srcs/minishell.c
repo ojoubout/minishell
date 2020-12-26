@@ -33,9 +33,9 @@ t_command   *ft_new_command(int in, int out)
 void    show_prompt()
 {    
     if (g_minishell.return_code)
-        write(1, BBLU " minishell "BRED"> "RESET, 32);
+        write(1, BBLU "minishell "BRED"> "RESET, 31);
     else
-        write(1, BBLU " minishell "BGRN"> "RESET, 32);
+        write(1, BBLU "minishell "BGRN"> "RESET, 31);
 }
 
 void    ft_split_free(char **ptr)
@@ -97,11 +97,12 @@ int    ft_precess_cmd(char *str)
 {
     t_command   *cmd;
 
-    cmd = g_minishell.cmd_head->content;
+    cmd = g_minishell.cmd_tail->content;
     if (((ft_strncmp(str, OUTPUT_RED, 1) == 0 || ft_strncmp(str, APP_OUTPUT_RED, 2) == 0 
         || ft_strncmp(str, INPUT_RED, 1) == 0) && g_minishell.read_next != NULL) ||
         (ft_strncmp(str, PIPE, 1) == 0 && (g_minishell.read_next != NULL || cmd->argv == NULL)))
         return ft_syntax_error(str);
+    // else if (*str !=)
     if (ft_strncmp(str, PIPE, 1) == 0)
         ft_handle_pipe(str);
     else if (ft_strncmp(str, INPUT_RED, 1) == 0)
@@ -117,11 +118,14 @@ int    ft_precess_cmd(char *str)
 
 int     main(void)
 {
+    signal(SIGINT, handle_sigint);
     g_minishell.return_code = 0;
-    g_minishell.stat = 1;
     while (1)
     {
         g_minishell.cmd_head = ft_lstnew(ft_new_command(0, 1));
+        g_minishell.cmd_tail = g_minishell.cmd_head;
+        g_minishell.stat = 1;
+        g_minishell.forked = 0;
         g_minishell.read_next = NULL;
         show_prompt();
         get_next_line(0, &g_minishell.command_line);
@@ -144,6 +148,11 @@ int     main(void)
             g_minishell.pos += len;
             // g_minishell.pos++;
         }
+        if (g_minishell.read_next != NULL)
+            ft_syntax_error("\n");
+
+        // print_commands();
+        execute_commands();
         free(g_minishell.command_line);
         ft_lstclear(&g_minishell.cmd_head, ft_free_command);
     }
