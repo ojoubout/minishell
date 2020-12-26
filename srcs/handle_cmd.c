@@ -9,7 +9,7 @@ int ft_syntax_error(char *token)
     ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
     ft_putstr_fd(token, 2);
     ft_putendl_fd("'", 2);
-    g_minishell.stat = 2;
+    g_minishell.stat = 0;
     return (1);
 }
 
@@ -57,8 +57,19 @@ int    ft_handle_pipe(char *str)
 
 int    ft_handle_input_red(char *str)
 {
+    int fd;
+
     if (g_minishell.read_next == INPUT_RED)
     {
+        fd = open(str, O_RDONLY);
+        // ft_putnbr_fd(fd, 1);
+        if (fd == -1)
+        {
+            // ft_printf("minishell: %s: %s", str, strerror(errno));
+            ft_putstr_fd("minishell: ", 2);
+            ft_putendl_fd(strerror(errno), 2);
+        }else
+            close(fd);
         ft_putendl_fd(str, 1);
         free(str);
         g_minishell.read_next = NULL;
@@ -93,7 +104,9 @@ int    ft_handle_output_red(char *str, char *app)
 
 void    ft_putstr(void *str)
 {
-    ft_putendl_fd(str, 1);
+    ft_putstr_fd("|", 1);
+    ft_putstr_fd(str, 1);
+    ft_putendl_fd("|", 1);
 }
 
 void    print_command(void *cmd) {
@@ -140,10 +153,13 @@ void    execute_command(t_command *cmd)
     argv = ft_lst_to_array(cmd->argv);
     path = ft_strjoin("/bin/", argv[0]);
     char *env_args[] = { (char*)0 };
-    printf("%s %d %d\n", cmd->argv->content, cmd->inRed, cmd->outRed);
+    // printf("|%s %d %d|\n", cmd->argv->content, cmd->inRed, cmd->outRed);
     dup2(cmd->inRed, 0);
     dup2(cmd->outRed, 1);
     execve(path, argv, env_args);
+    ft_putstr_fd("minishell: command not found: ", 2);
+    ft_putendl_fd(argv[0], 2);
+    exit(0);
 }
 
 void    execute_commands()
@@ -155,24 +171,25 @@ void    execute_commands()
     while (lst != NULL)
 	{
         cmd = (t_command *)lst->content;
+        if (!(cmd = (t_command *)lst->content) || !cmd->argv)
+            break;
         if (fork() == 0) {
+            // ft_putendl_fd("FORK", 1);
             signal(SIGINT, SIG_DFL);
-    		execute_command(lst->content);
+            // print_command(cmd);
+            execute_command(lst->content);
         }
         else
         {
             g_minishell.forked = 1;
-            wait(NULL);
+            wait(&g_minishell.return_code);
             if (cmd->inRed != 0)
                 close(cmd->inRed);
             if (cmd->outRed != 1)
                 close(cmd->outRed);
-
             g_minishell.forked = 0;
         }
-
 		lst = lst->next;
 	}
-
     // ft_lstiter(g_minishell.cmd_head, execute_command);
 }

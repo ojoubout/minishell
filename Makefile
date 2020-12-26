@@ -22,12 +22,19 @@ FLAGS=-Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME):
-	@gcc $(FLAGS) $(SRC) libft/libft.a -Iincludes -o $(NAME)
+	@make -C libft bonus
+	@make -C ft_printf all
+	@gcc $(FLAGS) $(SRC) libft/libft.a ft_printf/libftprintf.a -Iincludes -o $(NAME)
 
 clean:
+	@make -C libft clean
+	@make -C ft_printf clean
 
 
 fclean: clean
+	@make -C libft fclean
+	@make -C ft_printf fclean
+
 	@rm -rf $(NAME)
 
 re: fclean all

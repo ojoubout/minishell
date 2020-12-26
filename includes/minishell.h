@@ -14,8 +14,11 @@
 # define MINISHELL_H
 #include "../libft/libft.h"
 #include "../gnl/get_next_line.h"
+#include "../ft_printf/ft_printf.h"
 #include <stdio.h>
 #include <signal.h>
+#include <string.h>
+#include <errno.h>
 
 #define BCYN "\e[1;36m"
 #define BBLU "\e[1;33m"
