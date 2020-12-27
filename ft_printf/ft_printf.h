@@ -17,6 +17,8 @@
 # include <stdio.h>
 # include "libft/libft.h"
 
+int g_fd;
+
 ssize_t		ft_putstr(char *s);
 ssize_t		ft_putnbr(long n);
 ssize_t		ft_conversion_c(char c);
@@ -36,6 +38,6 @@ char		*ft_uitoa(unsigned int n);
 char		*ft_strprs(char *str);
 char		*ft_strzero(char *str);
 int			ft_args(char **f);
-int			ft_printf(const char *format, ...);
+int			ft_fprintf(int fd, const char *format, ...);
 
 #endif

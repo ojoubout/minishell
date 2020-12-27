@@ -42,7 +42,7 @@ int			ft_args(char **f)
 	else if (**f == 'x' || **f == 'X')
 		size = ft_conversion_x(va_arg(g_args, unsigned int), **f);
 	else if (**f != 0 && (i = ft_flags(f)) == -1)
-		size = write(1, *f, 1);
+		size = write(g_fd, *f, 1);
 	if (i > 0)
 		size += i;
 	return (size < 0 ? 0 : size);
@@ -57,19 +57,20 @@ void		ft_reset(void)
 	g_printzero = 0;
 }
 
-int			ft_printf(const char *format, ...)
+int			ft_fprintf(int fd, const char *format, ...)
 {
 	char	*f;
 	char	*str;
 	int		size;
 
 	size = 0;
+	g_fd = fd;
 	f = (char *)format;
 	va_start(g_args, format);
 	while (*f != '\0')
 	{
 		if (*f != '%')
-			size += write(1, f, 1);
+			size += write(g_fd, f, 1);
 		else
 		{
 			ft_reset();

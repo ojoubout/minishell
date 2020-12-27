@@ -37,11 +37,13 @@ t_command   *ft_new_command(int in, int out)
 
 void    show_prompt()
 {    
-    ft_putnbr_fd(g_minishell.return_code, 1);
-    if (g_minishell.return_code)
-        write(1, BBLU "minishell "BRED"> "RESET, 31);
-    else
-        write(1, BBLU "minishell "BGRN"> "RESET, 31);
+    // ft_fprintf(1, "|%d| ", g_minishell.return_code);
+    ft_fprintf(1, BBLU "minishell %s> "RESET,
+                g_minishell.return_code ? BRED : BGRN);
+    // if (g_minishell.return_code)
+    //     write(1, BBLU "minishell "BRED"> "RESET, 31);
+    // else
+    //     write(1, BBLU "minishell "BGRN"> "RESET, 31);
 }
 
 void    ft_split_free(char **ptr)

@@ -32,7 +32,7 @@ ssize_t	ft_putstr(char *s)
 	buff = ft_memset(buff, ' ', size);
 	ft_memcpy(buff + (g_minus == 1 ? 0 : (size - 1 - len)), s, len);
 	buff[size - 1] = '\0';
-	len = write(1, buff, size - 1);
+	len = write(g_fd, buff, size - 1);
 	free(buff);
 	free(s);
 	g_field_width = 0;

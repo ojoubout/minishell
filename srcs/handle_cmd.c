@@ -102,7 +102,7 @@ int    ft_handle_output_red(char *str, char *app)
     return (0);
 }
 
-void    ft_putstr(void *str)
+void    putstr(void *str)
 {
     ft_putstr_fd("|", 1);
     ft_putstr_fd(str, 1);
@@ -112,7 +112,7 @@ void    ft_putstr(void *str)
 void    print_command(void *cmd) {
     // ft_putendl_fd(cmd->argv->content);
     ft_putendl_fd("-----", 1);
-    ft_lstiter(((t_command *) cmd)->argv, ft_putstr);
+    ft_lstiter(((t_command *) cmd)->argv, putstr);
 }
 
 void    print_commands()
