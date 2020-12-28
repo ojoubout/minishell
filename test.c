@@ -5,7 +5,7 @@ int main() {
 
 	while (1) {
 		int r = read(0, &b, 1);
-		printf("%d %d\n", b, r);
+		printf("{%c\t|%d\t|%d}\n", b, b, r);
 	}
 	return (0);
 }

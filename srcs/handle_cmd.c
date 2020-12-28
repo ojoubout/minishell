@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_cmd.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ojoubout <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/27 15:43:10 by ojoubout          #+#    #+#             */
+/*   Updated: 2020/12/27 15:43:12 by ojoubout         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int ft_syntax_error(char *token)
@@ -6,9 +18,11 @@ int ft_syntax_error(char *token)
         token = "newline";
     else
         token[1] = 0;
-    ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
-    ft_putstr_fd(token, 2);
-    ft_putendl_fd("'", 2);
+    ft_fprintf(2, "minishell: syntax error near unexpected token `%s'\n",
+                token);
+    // ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+    // ft_putstr_fd(token, 2);
+    // ft_putendl_fd("'", 2);
     g_minishell.stat = 0;
     return (1);
 }
@@ -57,24 +71,19 @@ int    ft_handle_pipe(char *str)
 
 int    ft_handle_input_red(char *str)
 {
-    int fd;
-
     if (g_minishell.read_next == INPUT_RED)
     {
-        fd = open(str, O_RDONLY);
-        // ft_putnbr_fd(fd, 1);
-        if (fd == -1)
-        {
-            // ft_printf("minishell: %s: %s", str, strerror(errno));
-            ft_putstr_fd("minishell: ", 2);
-            ft_putendl_fd(strerror(errno), 2);
-        }else
-            close(fd);
-        ft_putendl_fd(str, 1);
-        free(str);
+        // fd = open(str, O_RDONLY);
+        // if (fd == -1) {
+        //     ft_fprintf(2, "minishell: %s: %s\n", str, strerror(errno));
+        //     g_minishell.stat = 0;
+        // } else
+        //     ((t_command *)g_minishell.cmd_head->content)->inRed = fd;
+        ft_lstadd_back(&((t_command *)g_minishell.cmd_head->content)->inFiles, ft_lstnew(str));
+        // free(str);
         g_minishell.read_next = NULL;
     } else {
-        ft_putstr_fd("IN:", 1);
+        // ft_putstr_fd("IN:", 1);
         g_minishell.read_next = INPUT_RED;
         g_minishell.pos++;
     }
@@ -83,17 +92,28 @@ int    ft_handle_input_red(char *str)
 
 int    ft_handle_output_red(char *str, char *app)
 {
-    if (g_minishell.read_next == OUTPUT_RED || g_minishell.read_next == APP_OUTPUT_RED)
+    if (g_minishell.read_next == OUTPUT_RED)
     {
-        ft_putendl_fd(str, 1);
-        free(str);
+        // fd = open(str, O_RDWR | O_CREAT |
+        //     (g_minishell.read_next == APP_OUTPUT_RED ? O_APPEND : 0), 0644);
+        // if (fd == -1) {
+        //     ft_fprintf(2, "minishell: %s: %s\n", str, strerror(errno));
+        //     g_minishell.stat = 0;
+        // } else
+        //     ((t_command *)g_minishell.cmd_head->content)->outRed = fd;
+
+        ft_lstadd_back(&((t_command *)g_minishell.cmd_head->content)->outFiles, ft_lstnew(str));
+        g_minishell.read_next = NULL;
+
+    } else if (g_minishell.read_next == APP_OUTPUT_RED) {
+        ft_lstadd_back(&((t_command *)g_minishell.cmd_head->content)->aoutFiles, ft_lstnew(str));
         g_minishell.read_next = NULL;
     } else {
         if (app == APP_OUTPUT_RED) {
-            ft_putstr_fd("AOUT:", 1);
+            // ft_putstr_fd("AOUT:", 1);
             g_minishell.pos += 2;
         } else {
-            ft_putstr_fd("OUT:", 1);
+            // ft_putstr_fd("OUT:", 1);
             g_minishell.pos++;
         }
         g_minishell.read_next = app;
@@ -142,6 +162,7 @@ char    **ft_lst_to_array(t_list    *lst)
     return (argv);
 }
 
+
 void    execute_command(t_command *cmd)
 {
     // t_command   *cmd;
@@ -154,6 +175,7 @@ void    execute_command(t_command *cmd)
     path = ft_strjoin("/bin/", argv[0]);
     char *env_args[] = { (char*)0 };
     // printf("|%s %d %d|\n", cmd->argv->content, cmd->inRed, cmd->outRed);
+    open_redirect_files();
     dup2(cmd->inRed, 0);
     dup2(cmd->outRed, 1);
     execve(path, argv, env_args);

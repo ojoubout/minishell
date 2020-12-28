@@ -82,7 +82,7 @@ int	ft_word_length(const char *s, char *c)
 	return (i);
 }
 
-char	**ft_free(char **ptr, size_t size)
+static char	**ft_free(char **ptr, size_t size)
 {
 	size_t	i;
 

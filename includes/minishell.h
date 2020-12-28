@@ -48,6 +48,9 @@ typedef struct  s_command
 {
     t_list  *argv;
     // char    **argv;
+    t_list  *outFiles;
+    t_list  *aoutFiles;
+    t_list  *inFiles;
     int     argc;
     int     outRed;
     int     inRed;
@@ -79,6 +82,8 @@ void    print_commands();
 void    execute_commands();
 void    handle_sigint(int sig);
 void    show_prompt();
+void    open_redirect_files();
+void    ft_free_command(void *cmd);
 
 // char	**ft_free(char **ptr, size_t size);
 

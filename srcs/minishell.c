@@ -32,18 +32,16 @@ t_command   *ft_new_command(int in, int out)
     cmd->argc = 0;
     cmd->inRed = in;
     cmd->outRed = out;
+    cmd->inFiles = NULL;
+    cmd->outFiles = NULL;
+    cmd->aoutFiles = NULL;
     return (cmd);
 }
 
 void    show_prompt()
 {    
-    // ft_fprintf(1, "|%d| ", g_minishell.return_code);
     ft_fprintf(1, BBLU "minishell %s> "RESET,
                 g_minishell.return_code ? BRED : BGRN);
-    // if (g_minishell.return_code)
-    //     write(1, BBLU "minishell "BRED"> "RESET, 31);
-    // else
-    //     write(1, BBLU "minishell "BGRN"> "RESET, 31);
 }
 
 void    ft_split_free(char **ptr)
@@ -133,18 +131,48 @@ void    init()
     g_minishell.pos = 0;
 }
 
+int     get_command_line(char **line) 
+{
+    char    b[2];
+    int     r;
+    char    *tmp;
+
+    *line = ft_strdup("");
+    while ((r = read(0, b, 1)) != -1)
+    {
+        if (r == 0)
+        {
+            if (ft_strncmp(*line, "", 1) == 0)
+                ft_exit();
+            ft_putstr_fd("  \b\b", 1);    
+            continue;
+        }
+        else if (b[0] == '\n')
+            break;
+        tmp = *line;
+        b[1] = 0;
+        *line = ft_strjoin(*line, b);
+        free(tmp);
+    }
+    return (r);
+}
+
 int     main(void)
 {
     signal(SIGINT, handle_sigint);
-    // signal(SIGINT, handle_sigint);
+    signal(SIGQUIT, handle_sigint);
     g_minishell.return_code = 0;
     while (1)
     {
         init();
         show_prompt();
-        int r = get_next_line(0, &g_minishell.command_line);
-        if (r == 0)
-            ft_exit();
+        // g_minishell.command_line = get_command_line();
+        get_command_line(&g_minishell.command_line);
+        // get_next_line(0, &g_minishell.command_line);
+        // if (r == 0 && !g_minishell.command_line)
+            // ft_exit();
+        // else
+            // write(1, "HH", 2);
         int len = ft_strlen(g_minishell.command_line);
         while (g_minishell.stat && g_minishell.command_line[g_minishell.pos] &&
         (g_minishell.pos += get_next_word(g_minishell.command_line + g_minishell.pos, SEP)) != -1)
@@ -167,6 +195,7 @@ int     main(void)
         if (g_minishell.stat)
             execute_commands();
         free(g_minishell.command_line);
+        g_minishell.command_line = NULL;
         ft_lstclear(&g_minishell.cmd_head, ft_free_command);
     }
     return (EXIT_SUCCESS);
