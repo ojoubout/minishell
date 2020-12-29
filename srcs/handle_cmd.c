@@ -55,8 +55,8 @@ int    ft_handle_pipe(char *str)
 {
     // t_list      *item;
     t_command   *cmd;
-
     int         p[2];
+
     cmd = g_minishell.cmd_tail->content;
     if (pipe(p) < 0)
         ft_error("pipe error");
@@ -104,7 +104,7 @@ int    ft_handle_input_red(char *str)
         //     g_minishell.stat = 0;
         // } else
         //     ((t_command *)g_minishell.cmd_head->content)->inRed = fd;
-        
+        ft_fprintf(1, "|%s|\n", str);
         ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->inFiles, ft_lstnew(str));
         // free(str);
         g_minishell.read_next = NULL;

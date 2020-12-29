@@ -88,6 +88,7 @@ void    show_prompt();
 void    open_redirect_files(t_command *cmd);
 void    ft_free_command(void *cmd);
 void    free_redirect_files();
+char	*ft_quotes_convert(char *str);
 
 // char	**ft_free(char **ptr, size_t size);
 
