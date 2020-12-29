@@ -30,6 +30,7 @@ int     open_file(char *file, int flags, char *type)
     if (fd == -1) {  
         ft_fprintf(2, "minishell: %s: %s\n", file, strerror(errno));
         g_minishell.stat = 0;
+        exit(1);
     }
     return fd;
 }
@@ -75,14 +76,30 @@ void    open_aout_file(void  *f)
 
 void ft_free(void *ptr)
 {
+    // ft_fprintf(1, "%p %s\n", ptr, ptr);
     free(ptr);
 }
-void    open_redirect_files()
+void    open_redirect_files(t_command *cmd)
 {
-    ft_lstiter(((t_command *)g_minishell.cmd_head->content)->inFiles, open_input_file);
-    ft_lstiter(((t_command *)g_minishell.cmd_head->content)->outFiles, open_out_file);
-    ft_lstiter(((t_command *)g_minishell.cmd_head->content)->aoutFiles, open_aout_file);
-    ft_lstclear(&((t_command *)g_minishell.cmd_head->content)->inFiles, ft_free);
-    ft_lstclear(&((t_command *)g_minishell.cmd_head->content)->outFiles, ft_free);
-    ft_lstclear(&((t_command *)g_minishell.cmd_head->content)->aoutFiles, ft_free);
+    ft_lstiter(cmd->inFiles, open_input_file);
+    ft_lstiter(cmd->outFiles, open_out_file);
+    ft_lstiter(cmd->aoutFiles, open_aout_file);
+    // ft_lstclear(&(cmd->inFiles), ft_free);
+    // ft_lstclear(&(cmd->outFiles), ft_free);
+    // ft_lstclear(&(cmd->aoutFiles), ft_free);
+}
+
+void    free_files(void *c)
+{
+    t_command  *cmd;
+
+    cmd = c;
+    ft_lstclear(&cmd->inFiles, ft_free);
+    ft_lstclear(&cmd->outFiles, ft_free);
+    ft_lstclear(&cmd->aoutFiles, ft_free);
+}
+
+void    free_redirect_files()
+{
+    ft_lstiter(g_minishell.cmd_head, free_files);
 }

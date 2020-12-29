@@ -14,15 +14,14 @@
 
 void    handle_sigint(int sig)
 {
-    printf("SIGNAL %d\n", sig);
-    ft_putstr_fd("\b\b  \b\b", 1);
     if (sig == SIGINT) {
-        write(1, "\n", 1);
         g_minishell.return_code = 1;
         if (!g_minishell.forked)
         {
+            ft_putendl_fd("\b\b  \b\b", 1);
             g_minishell.return_code = 130;
             show_prompt();
-        }
+        } else
+            write(1, "\n", 1);
     }
 }

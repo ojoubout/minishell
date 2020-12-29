@@ -101,8 +101,9 @@ int    ft_handle_output_red(char *str, char *app)
         //     g_minishell.stat = 0;
         // } else
         //     ((t_command *)g_minishell.cmd_head->content)->outRed = fd;
-
-        ft_lstadd_back(&((t_command *)g_minishell.cmd_head->content)->outFiles, ft_lstnew(str));
+        t_list *tmp;
+        ft_lstadd_back(&((t_command *)g_minishell.cmd_head->content)->outFiles, (tmp = ft_lstnew(str)));
+        // ft_fprintf(1, "%p %s %p\n", str, str, tmp);
         g_minishell.read_next = NULL;
 
     } else if (g_minishell.read_next == APP_OUTPUT_RED) {
@@ -175,13 +176,13 @@ void    execute_command(t_command *cmd)
     path = ft_strjoin("/bin/", argv[0]);
     char *env_args[] = { (char*)0 };
     // printf("|%s %d %d|\n", cmd->argv->content, cmd->inRed, cmd->outRed);
-    open_redirect_files();
+    open_redirect_files(cmd);
     dup2(cmd->inRed, 0);
     dup2(cmd->outRed, 1);
     execve(path, argv, env_args);
     ft_putstr_fd("minishell: command not found: ", 2);
     ft_putendl_fd(argv[0], 2);
-    exit(0);
+    exit(127);
 }
 
 void    execute_commands()
@@ -203,8 +204,12 @@ void    execute_commands()
         }
         else
         {
+            free_redirect_files();
             g_minishell.forked = 1;
             wait(&g_minishell.return_code);
+            char *s = (char *)&g_minishell.return_code;
+            ft_fprintf(1, "%d %d %d %d\n", s[0], s[1], s[2], s[3]);
+            g_minishell.return_code = WEXITSTATUS(g_minishell.return_code);
             if (cmd->inRed != 0)
                 close(cmd->inRed);
             if (cmd->outRed != 1)

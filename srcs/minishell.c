@@ -40,7 +40,7 @@ t_command   *ft_new_command(int in, int out)
 
 void    show_prompt()
 {    
-    ft_fprintf(1, BBLU "minishell %s> "RESET,
+    ft_fprintf(1, BBLU "minishell %d%s> "RESET, g_minishell.return_code,
                 g_minishell.return_code ? BRED : BGRN);
 }
 

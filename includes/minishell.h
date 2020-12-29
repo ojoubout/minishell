@@ -82,8 +82,9 @@ void    print_commands();
 void    execute_commands();
 void    handle_sigint(int sig);
 void    show_prompt();
-void    open_redirect_files();
+void    open_redirect_files(t_command *cmd);
 void    ft_free_command(void *cmd);
+void    free_redirect_files();
 
 // char	**ft_free(char **ptr, size_t size);
 
