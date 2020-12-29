@@ -31,6 +31,7 @@
 #define OUTPUT_RED ">" 
 #define APP_OUTPUT_RED ">>"
 #define SEP " ;|<>"
+
 typedef struct  s_minishell
 { 
     int         return_code;
@@ -51,7 +52,6 @@ typedef struct  s_command
     t_list  *outFiles;
     t_list  *aoutFiles;
     t_list  *inFiles;
-    int     argc;
     int     outRed;
     int     inRed;
     // char    *read_next;
