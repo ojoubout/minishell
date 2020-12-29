@@ -196,8 +196,8 @@ int     main(void)
             ft_syntax_error("\n");
 
         // print_commands();
-        // if (g_minishell.stat)
-        //     execute_commands();
+        if (g_minishell.stat)
+            execute_commands();
         free(g_minishell.command_line);
         g_minishell.command_line = NULL;
         ft_lstclear(&g_minishell.cmd_head, ft_free_command);
