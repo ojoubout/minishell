@@ -140,11 +140,12 @@ int     get_command_line(char **line)
     *line = ft_strdup("");
     while ((r = read(0, b, 1)) != -1)
     {
+        // ft_fprintf(1, "%d %d %c %s\n", r, *b, *b, *line);
         if (r == 0)
         {
             if (ft_strncmp(*line, "", 1) == 0)
                 ft_exit();
-            ft_putstr_fd("  \b\b", 1);    
+            ft_putstr_fd("  \b\b", 1);
             continue;
         }
         else if (b[0] == '\n')
@@ -188,7 +189,7 @@ int     main(void)
             g_minishell.pos += len;
             // g_minishell.pos++;
         }
-        if (g_minishell.read_next != NULL)
+        if (g_minishell.stat && g_minishell.read_next != NULL)
             ft_syntax_error("\n");
 
         // print_commands();

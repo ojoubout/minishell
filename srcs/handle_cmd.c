@@ -23,6 +23,7 @@ int ft_syntax_error(char *token)
     // ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
     // ft_putstr_fd(token, 2);
     // ft_putendl_fd("'", 2);
+    g_minishell.return_code = 258;
     g_minishell.stat = 0;
     return (1);
 }
@@ -189,6 +190,7 @@ void    execute_commands()
 {
     t_list  *lst;
     t_command   *cmd;
+    int         ret;
 
     lst = g_minishell.cmd_head;
     while (lst != NULL)
@@ -206,10 +208,11 @@ void    execute_commands()
         {
             free_redirect_files();
             g_minishell.forked = 1;
-            wait(&g_minishell.return_code);
-            char *s = (char *)&g_minishell.return_code;
+            wait(&ret);
+            char *s = (char *)&ret;
             ft_fprintf(1, "%d %d %d %d\n", s[0], s[1], s[2], s[3]);
-            g_minishell.return_code = WEXITSTATUS(g_minishell.return_code);
+            if (WIFEXITED(ret))
+                g_minishell.return_code = WEXITSTATUS(ret);
             if (cmd->inRed != 0)
                 close(cmd->inRed);
             if (cmd->outRed != 1)

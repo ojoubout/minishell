@@ -19,9 +19,13 @@ void    handle_sigint(int sig)
         if (!g_minishell.forked)
         {
             ft_putendl_fd("\b\b  \b\b", 1);
-            g_minishell.return_code = 130;
+            free(g_minishell.command_line);
+            g_minishell.command_line = ft_strdup("");
             show_prompt();
-        } else
+        } else {
+            g_minishell.return_code = 130;
             write(1, "\n", 1);
+            // exit(130);
+        }
     }
 }
