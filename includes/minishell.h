@@ -30,6 +30,7 @@
 #define INPUT_RED "<"
 #define OUTPUT_RED ">" 
 #define APP_OUTPUT_RED ">>"
+#define SEMI_COLUMN ";"
 #define SEP " ;|<>"
 
 typedef struct  s_minishell
@@ -71,6 +72,8 @@ int         ft_handle_cmd(char *str);
 int         ft_handle_pipe(char *str);
 int         ft_handle_input_red(char *str);
 int         ft_handle_output_red(char *str, char *app);
+int         ft_handle_semi_column(char *str);
+
 void        ft_error(char *str);
 t_command   *ft_new_command(int in, int out);
 int         ft_syntax_error(char *token);

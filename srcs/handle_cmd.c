@@ -70,6 +70,26 @@ int    ft_handle_pipe(char *str)
     return (0);
 }
 
+int    ft_handle_semi_column(char *str)
+{
+    // t_list      *item;
+    t_command   *cmd;
+
+    // int         p[2];
+    cmd = g_minishell.cmd_tail->content;
+    // if (pipe(p) < 0)
+        // ft_error("pipe error");
+    // cmd->outRed = 1;
+    g_minishell.cmd_tail = ft_lstnew(ft_new_command(0, 1));
+    ft_lstadd_back(&g_minishell.cmd_head, g_minishell.cmd_tail);
+
+    ft_putstr_fd("SEMI-C:", 1);
+    ft_putendl_fd(str, 1);
+    g_minishell.read_next = NULL;
+    g_minishell.pos++;
+    return (0);
+}
+
 int    ft_handle_input_red(char *str)
 {
     if (g_minishell.read_next == INPUT_RED)
@@ -209,8 +229,8 @@ void    execute_commands()
             free_redirect_files();
             g_minishell.forked = 1;
             wait(&ret);
-            char *s = (char *)&ret;
-            ft_fprintf(1, "%d %d %d %d\n", s[0], s[1], s[2], s[3]);
+            // char *s = (char *)&ret;
+            // ft_fprintf(1, "%d %d %d %d\n", s[0], s[1], s[2], s[3]);
             if (WIFEXITED(ret))
                 g_minishell.return_code = WEXITSTATUS(ret);
             if (cmd->inRed != 0)

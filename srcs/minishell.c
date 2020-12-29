@@ -29,7 +29,6 @@ t_command   *ft_new_command(int in, int out)
 
     cmd = malloc(sizeof(t_command));
     cmd->argv = NULL;
-    cmd->argc = 0;
     cmd->inRed = in;
     cmd->outRed = out;
     cmd->inFiles = NULL;
@@ -103,13 +102,17 @@ int    ft_precess_cmd(char *str)
     t_command   *cmd;
 
     cmd = g_minishell.cmd_tail->content;
+    // ft_fprintf(1, "%s\n", str);
     if (((ft_strncmp(str, OUTPUT_RED, 1) == 0 || ft_strncmp(str, APP_OUTPUT_RED, 2) == 0 
         || ft_strncmp(str, INPUT_RED, 1) == 0) && g_minishell.read_next != NULL) ||
-        (ft_strncmp(str, PIPE, 1) == 0 && (g_minishell.read_next != NULL || cmd->argv == NULL)))
+        ((ft_strncmp(str, PIPE, 1) == 0 || ft_strncmp(str, SEMI_COLUMN, 1) == 0) && 
+        (g_minishell.read_next != NULL || cmd->argv == NULL)))
         return ft_syntax_error(str);
     // else if (*str !=)
     if (ft_strncmp(str, PIPE, 1) == 0)
         ft_handle_pipe(str);
+    else if (ft_strncmp(str, SEMI_COLUMN, 1) == 0)
+        ft_handle_semi_column(str);
     else if (ft_strncmp(str, INPUT_RED, 1) == 0)
         ft_handle_input_red(str);
     else if (ft_strncmp(str, APP_OUTPUT_RED, 2) == 0)
@@ -193,8 +196,8 @@ int     main(void)
             ft_syntax_error("\n");
 
         // print_commands();
-        if (g_minishell.stat)
-            execute_commands();
+        // if (g_minishell.stat)
+        //     execute_commands();
         free(g_minishell.command_line);
         g_minishell.command_line = NULL;
         ft_lstclear(&g_minishell.cmd_head, ft_free_command);
