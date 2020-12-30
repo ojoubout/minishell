@@ -12,6 +12,20 @@
 
 #include "minishell.h"
 
+int		ft_is_backslashed(const char *str, int i)
+{
+	int is_backslashed;
+
+	i--;
+	is_backslashed = 0;
+	while (i >= 0 && str[i] == '\\')
+	{
+		is_backslashed = !is_backslashed;
+		i--;
+	}
+	return (is_backslashed);
+}
+
 int	ft_on_char(const char *str, int i, char *c)
 {
 	int j;
@@ -20,7 +34,7 @@ int	ft_on_char(const char *str, int i, char *c)
 	while (c[j])
 	{
 		if (str[i] == c[j])
-			if (i == 0 || str[i - 1] != '\\')
+			if (i == 0 || !ft_is_backslashed(str, i))
 				return 1;
 		j++;
 	}
@@ -48,6 +62,11 @@ char	*ft_quotes_convert(char *str)
 	res = ft_strdup("");
 	while (str[i])
 	{
+		if (ft_on_char(str, i, "\\"))
+		{
+			i++;
+			continue;
+		}
 		if (!quote[0] || ft_on_char(str, i, quote))
 		{
 			if (ft_on_char(str, i, "'\"")) {

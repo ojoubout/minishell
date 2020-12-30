@@ -37,7 +37,11 @@ int    ft_handle_cmd(char *str)
 
     len = ft_word_length(str, SEP);
     str = ft_substr(str, 0, len);
-    arg = ft_quotes_convert(str);
+    arg = ft_convert_env(str);
+    free(str);
+    str = arg;
+    // ft_fprintf(1, "|%s|\n", ft_convert_env(str));
+    arg = ft_quotes_convert(arg);
     free(str);
     if (g_minishell.read_next == INPUT_RED)
         ft_handle_input_red(arg);

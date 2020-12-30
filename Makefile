@@ -13,7 +13,7 @@
 NAME=minishell
 
 SRC = srcs/minishell.c srcs/ft_sh_split.c srcs/handle_cmd.c srcs/handle_sig.c \
-	srcs/redirect.c srcs/handle_exec.c
+	srcs/redirect.c srcs/handle_exec.c srcs/env_var.c
 SRC += gnl/get_next_line.c
 
 OBJ = $(SRC:.c=.o)

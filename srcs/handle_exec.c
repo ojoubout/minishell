@@ -97,13 +97,13 @@ void ft_cd(char **argv)
         ret = chdir(g_env.home);
     }
     if (ret < 0)
-        ft_putstr_fd(strerror(errno), 2);
+        ft_putendl_fd(strerror(errno), 2);
 }
 
 void ft_pwd(char **argv)
 {
     argv = NULL;
-    ft_putstr_fd(getcwd(NULL, 0), 1);
+    ft_putendl_fd(getcwd(NULL, 0), 1);
 }
 
 void    ft_export(char **argv)
@@ -176,7 +176,7 @@ void ft_redirect(char **argv)
         if (ft_try_path(argv))
             return ;
     }
-    printf("minishell: command not found: %s\n", argv[0]);
+    ft_fprintf(2, "minishell: %s: command not found\n", argv[0]);
 }
 
 void    execute_command(t_command *cmd)

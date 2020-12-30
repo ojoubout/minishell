@@ -87,18 +87,21 @@ void        ft_error(char *str);
 t_command   *ft_new_command(int in, int out);
 int         ft_syntax_error(char *token);
 
-int	ft_on_char(const char *str, int i, char *c);
-int	ft_word_length(const char *s, char *c);
+int			ft_on_char(const char *str, int i, char *c);
+int			ft_word_length(const char *s, char *c);
 char		**ft_sh_split(char const *s, char *c);
-void    print_commands();
-void    execute_commands();
-void    handle_sigint(int sig);
-void    show_prompt();
-void    open_redirect_files(t_command *cmd);
-void    ft_free_command(void *cmd);
-void    free_redirect_files();
-char	*ft_quotes_convert(char *str);
-t_list	**ft_array_to_lst(char **array);
+void    	print_commands();
+void    	execute_commands();
+void    	handle_sigint(int sig);
+void    	show_prompt();
+void    	open_redirect_files(t_command *cmd);
+void    	ft_free_command(void *cmd);
+void    	free_redirect_files();
+char		*ft_quotes_convert(char *str);
+t_list		**ft_array_to_lst(char **array);
+char		*ft_strappend(char *str, char c);
+int 		get_next_word(const char *str, char *d);
+char    	*ft_convert_env(char *str);
 
 // char	**ft_free(char **ptr, size_t size);
 
