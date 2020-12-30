@@ -165,8 +165,33 @@ int     get_command_line(char **line)
     return (r);
 }
 
-int     main(void)
+char *get_path(char **env)
 {
+    int i; 
+
+    i = 0;
+    while (env[i])
+    {   ft_putstr_fd(env[i], 2);
+        ft_putstr_fd("\n", 2);
+        if (!strncmp(env[i], "PATH", 4))
+        {
+            return (env[i] + 5);
+        }
+        else if (!strncmp(env[i], "HOME", 4))
+        {
+            g_env.home = env[i] + 5;
+        }
+        i++;
+    }
+    return (NULL);
+}
+
+int     main(int argc, char **argv, char **env)
+{
+    g_env.path = ft_split(get_path(env), ':');
+    g_env.env_head = ft_array_to_lst(env);
+    argc = 0;
+    argv = NULL;
     signal(SIGINT, handle_sigint);
     signal(SIGQUIT, handle_sigint);
     g_minishell.return_code = 0;
@@ -179,7 +204,7 @@ int     main(void)
             // g_minishell.cmd_tail = g_minishell.cmd_head;
             g_minishell.stat = 1;
             g_minishell.forked = 0;
-            g_minishell.read_next = NULL;
+            // g_minishell.read_next = NULL;
             g_minishell.pos = 0;
             get_command_line(&g_minishell.command_line);
         }

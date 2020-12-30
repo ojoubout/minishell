@@ -25,6 +25,7 @@ int ft_syntax_error(char *token)
     // ft_putendl_fd("'", 2);
     g_minishell.return_code = 258;
     g_minishell.stat = 0;
+    g_minishell.read_next = NULL;
     return (1);
 }
 
@@ -169,7 +170,7 @@ void    print_commands()
 }
 
 //----------------
-
+/*
 char    **ft_lst_to_array(t_list    *lst)
 {
     char        **argv;
@@ -248,3 +249,4 @@ void    execute_commands()
     free_redirect_files();
     // ft_lstiter(g_minishell.cmd_head, execute_command);
 }
+*/
