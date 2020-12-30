@@ -53,6 +53,8 @@ char	*ft_quotes_convert(char *str)
 			if (ft_on_char(str, i, "'\"")) {
                 quote[0] = quote[0] ? 0 : str[i];
 				i++;
+				if (!str[i])
+					break;
 			}
         }
 		tmp = res;

@@ -35,7 +35,9 @@ int    ft_handle_cmd(char *str)
     t_command   *cmd;
 
     len = ft_word_length(str, SEP);
-    arg = ft_substr(str, 0, len);
+    str = ft_substr(str, 0, len);
+    arg = ft_quotes_convert(str);
+    free(str);
     if (g_minishell.read_next == INPUT_RED)
         ft_handle_input_red(arg);
     else if (g_minishell.read_next == OUTPUT_RED || g_minishell.read_next == APP_OUTPUT_RED)
@@ -64,11 +66,8 @@ int    ft_handle_pipe(char *str)
     // ft_fprintf(1, "PIPE %d\n", p[0]);
     g_minishell.cmd_tail = ft_lstnew(ft_new_command(p[0], 1));
     ft_lstadd_back(&g_minishell.cmd_head, g_minishell.cmd_tail);
-
-    // ft_putstr_fd("PIPE:", 1);
-    // ft_putendl_fd(str, 1);
     str = NULL;
-    g_minishell.read_next = NULL;
+    g_minishell.read_next = PIPE;
     g_minishell.pos++;
     return (0);
 }
@@ -208,8 +207,7 @@ void    execute_command(t_command *cmd)
     dup2(cmd->inRed, 0);
     dup2(cmd->outRed, 1);
     execve(path, argv, env_args);
-    ft_putstr_fd("minishell: command not found: ", 2);
-    ft_putendl_fd(argv[0], 2);
+    ft_fprintf(2, "minishell: %s: command not found\n", argv[0]);
     exit(127);
 }
 
