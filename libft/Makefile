@@ -36,15 +36,16 @@ BOBJ=ft_lstnew_bonus.o ft_lstadd_front_bonus.o ft_lstsize_bonus.o \
 
 FLAGS=-Wall -Werror -Wextra
 
+CC=clang
 all: $(NAME)
 
 $(NAME):
-	@gcc $(FLAGS) -c $(SRC) -I.
+	@$(CC) $(FLAGS) -c $(SRC) -I.
 	@ar rc $(NAME) $(OBJ)
 	@ranlib $(NAME)
 
 bonus:
-	@gcc $(FLAGS) -c $(SRC) $(BSRC) -I.
+	@$(CC) $(FLAGS) -c $(SRC) $(BSRC) -I.
 	@ar rc $(NAME) $(OBJ) $(BOBJ)
 	@ranlib $(NAME)	
 

@@ -26,6 +26,7 @@ char    *ft_convert_env(char *str)
     i = 0;
     on_dollar = 0;
     res = ft_strdup("");
+
     ft_bzero(var, 100);
     while (str[i])
     {
@@ -50,14 +51,14 @@ char    *ft_convert_env(char *str)
     return (res);
 }
 
-char    *ft_get_var(char *name)
-{
-    char *res;
-    t_list *lst;
+// char    *ft_get_var(char *name)
+// {
+//     char *res;
+//     t_list *lst;
 
-    lst = g_env.env_head;
-    while (lst)
-    {
+//     lst = g_env.env_head;
+//     while (lst)
+//     {
         
-    }
-}
+//     }
+// }

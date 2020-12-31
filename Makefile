@@ -6,7 +6,7 @@
 #    By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/10 10:53:07 by ojoubout          #+#    #+#              #
-#    Updated: 2019/11/23 22:10:50 by ojoubout         ###   ########.fr        #
+#    Updated: 2020/12/31 14:50:17 by ojoubout         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,14 +18,16 @@ SRC += gnl/get_next_line.c
 
 OBJ = $(SRC:.c=.o)
 
-FLAGS=-Wall -Wextra -Werror -g
+FLAGS=-Wall -Wextra -Werror -g3
 
 all: $(NAME)
 
+CC=clang
+
 $(NAME):
-	@make -C libft bonus
-	@make -C ft_printf all
-	@gcc $(FLAGS) $(SRC) libft/libft.a ft_printf/libftprintf.a -Iincludes -o $(NAME)
+	@make CC=$(CC) -C libft bonus
+	@make CC=$(CC) -C ft_printf all
+	@$(CC) $(FLAGS) $(SRC) ft_printf/libftprintf.a libft/libft.a -Iincludes -o $(NAME)
 
 clean:
 	@make -C libft clean

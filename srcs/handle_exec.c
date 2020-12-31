@@ -39,6 +39,7 @@ t_list **ft_array_to_lst(char **array)
 
     if (!(head = malloc(sizeof(t_list *))))
         return (NULL);
+    *head = NULL;
     i = 0;
     while (array[i])
     {
@@ -72,7 +73,7 @@ void ft_echo(char **argv)
     int i;
 
     i = 1;
-    if (!strcmp(argv[1], "-n"))
+    if (argv[1] && !ft_strncmp(argv[1], "-n", 3))
         i = 2;
     while (argv[i])
     {
@@ -81,7 +82,7 @@ void ft_echo(char **argv)
         if (argv[i])
             ft_putstr_fd(" ", 1);
     }
-    if (strcmp(argv[1], "-n"))
+    if (argv[1] && ft_strncmp(argv[1], "-n", 3))
         ft_putstr_fd("\n", 1);
 }
 
@@ -102,8 +103,12 @@ void ft_cd(char **argv)
 
 void ft_pwd(char **argv)
 {
+    char    *pwd;
+
     argv = NULL;
-    ft_putendl_fd(getcwd(NULL, 0), 1);
+    pwd = getcwd(NULL, 0);
+    ft_putendl_fd(pwd, 1);
+    free(pwd);
 }
 
 void    ft_export(char **argv)
@@ -138,19 +143,24 @@ int ft_try_path(char **argv)
     struct stat sb;
     char *env_args[] = { (char*)0 };
     char *s = NULL;
+    char     *tmp;
 
     i = 0;
     // printf("%s", argv[0]);
     while (g_env.path[i])
     {
         s = ft_strjoin(g_env.path[i], "/");
+        tmp = s;
         s = ft_strjoin(s, argv[0]);
+        free(tmp);
         // printf("%s\n", s);
         if (stat(s, &sb) == 0 && sb.st_mode & S_IXUSR)
 		{
             execve(s, argv, env_args);
+            free(s);
             return (1);
         }
+        free(s);
         i++;
     }
     return (0);
@@ -219,8 +229,10 @@ void    execute_commands()
         if ((ret = is_command(argv[0])))
         {
             treat_cmd(argv, ret);
+            free(argv);
             return ;
         }
+        free(argv);
 
         if (fork() == 0) {
             // ft_putendl_fd("FORK", 1);
