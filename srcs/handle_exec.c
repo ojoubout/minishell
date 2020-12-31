@@ -50,26 +50,76 @@ t_list *lstchr(t_list *head, char *s)
     return (NULL);
 }
 
-void delete_node(char *s)
+// void delete_node(char *s)
+// {
+//     int len;
+//     t_list *curr;
+//     t_list *prev;
+//     /* TODO: you need to update the env_head to check for updates */
+//     curr = g_env.env_head;
+//     prev = curr;
+//     while (curr)
+//     {
+//         len = 0;
+//         // printf("*** %s\n", ((char *)curr->content));
+//         while (((char *)curr->content)[len] != '='){
+//             printf("%d\n", len);
+//             len++;
+//         }
+//         // printf("---> %d\n", strncmp(curr->content, s, len));
+//         if (!strncmp(curr->content, s, len))
+//         {
+//             ft_fprintf(2, "hi");
+//             prev->next = curr->next;
+//             ft_lstdelone(curr, free);
+//             ft_fprintf(2, "%p *** %p\n", prev, curr);
+//             return ;
+//         }
+//         prev = prev->next;
+//         curr = curr->next;
+//     }
+// }
+
+int customized_len(char *s)
 {
     int len;
-    t_list *curr;
-    t_list *prev;
-    /* TODO: you need to update the env_head to check for updates */
+
     len = 0;
-    curr = g_env.env_head;
-    prev = curr;
-    while (curr)
+    while (s[len] && s[len] != '=')
     {   
-        while (((char *)curr->content)[len] != '=')
             len++;
-        if (!strncmp(curr->content, s, len))
-        {
-            prev->next = curr->next;
-            ft_lstdelone(curr, free);
-        }
-        curr = curr ->next;
     }
+    return (len);
+}
+
+void deleteNode(char *s) 
+{ 
+    // Store head node 
+    t_list *temp = g_env.env_head, *prev; 
+  
+    // If head node itself holds the key to be deleted 
+    if (temp != NULL && !strncmp(temp->content, s, customized_len(temp->content))) 
+        {
+        g_env.env_head = temp->next;   // Changed head 
+        ft_lstdelone(temp, free);
+        return; 
+        }
+  
+    // Search for the key to be deleted, keep track of the 
+    // previous node as we need to change 'prev->next' 
+    while (temp != NULL && strncmp(temp->content, s, customized_len(temp->content))) 
+    {
+        prev = temp; 
+        temp = temp->next; 
+    }
+  
+    // If key was not present in linked list 
+    if (temp == NULL) return; 
+  
+    // Unlink the node from linked list 
+    prev->next = temp->next; 
+  
+    ft_lstdelone(temp, free);  // Free memory 
 }
 
 t_list *ft_array_to_lst(char **array)
@@ -83,7 +133,7 @@ t_list *ft_array_to_lst(char **array)
     head = NULL;
     while (array[i])
     {
-        ft_lstadd_back(&head, ft_lstnew(array[i]));
+        ft_lstadd_back(&head, ft_lstnew(ft_strdup(array[i])));
         i++;
     }
     return (head);
@@ -238,7 +288,7 @@ void    ft_export(char **argv)
     }
     else
     {
-        ft_lstadd_back(&g_env.env_head, ft_lstnew(argv[1]));
+        ft_lstadd_back(&g_env.env_head, ft_lstnew(ft_strdup(argv[1])));
     }
     temp = lstchr(g_env.env_head, sp[0]);
     if (temp)
@@ -253,7 +303,7 @@ void    ft_export(char **argv)
 
 void ft_unset(char **argv)
 {
-    delete_node(argv[1]);
+    deleteNode(argv[1]);
 }
 
 void treat_cmd(char **argv, int cmd_id)
@@ -362,10 +412,8 @@ void    execute_commands()
         if ((ret = is_command(argv[0])))
         {
             treat_cmd(argv, ret);
-            free(argv);
             return ;
         }
-        free(argv);
 
         if (fork() == 0) {
             // ft_putendl_fd("FORK", 1);

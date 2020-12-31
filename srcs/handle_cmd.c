@@ -47,7 +47,7 @@ int    ft_handle_cmd(char *str)
         ft_handle_input_red(arg);
     else if (g_minishell.read_next == OUTPUT_RED || g_minishell.read_next == APP_OUTPUT_RED)
         ft_handle_output_red(arg, g_minishell.read_next);
-    else {
+    else if (arg[0]) {
         // ft_putstr_fd("CMD:", 1);
         cmd = g_minishell.cmd_tail->content;
         // ft_fprintf(1, "CMD %s %d\n", arg, cmd->inRed);
