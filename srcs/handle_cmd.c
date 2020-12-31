@@ -40,8 +40,8 @@ int    ft_handle_cmd(char *str)
     arg = ft_convert_env(str);
     free(str);
     str = arg;
-    // ft_fprintf(1, "|%s|\n", ft_convert_env(str));
     arg = ft_quotes_convert(arg);
+    // ft_fprintf(2, "%p\n", arg);
     free(str);
     if (g_minishell.read_next == INPUT_RED)
         ft_handle_input_red(arg);

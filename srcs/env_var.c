@@ -14,20 +14,31 @@
 
 char    *env_sep = "'\"$\\";
 
+char    *ft_get_var(char *name)
+{
+    char *res;
+    t_list *lst;
+
+    lst = lstchr(g_env.env_head, name);
+    if (lst == NULL)
+        return (ft_strdup(""));
+    res = ft_strchr(lst->content, '=');
+    return (ft_strdup(res + 1));
+}
+
 char    *ft_convert_env(char *str)
 {
     int     i;
     int     on_dollar;
     char    *res;
     char    *tmp;
-    char    var[100];
+    char    *var;
     int     len;
 
     i = 0;
     on_dollar = 0;
     res = ft_strdup("");
 
-    ft_bzero(var, 100);
     while (str[i])
     {
         if (ft_on_char(str, i, "$")) {
@@ -36,10 +47,12 @@ char    *ft_convert_env(char *str)
             len = ft_word_length(str + i, env_sep);
             tmp = ft_substr(str, i, len);
             i += len;
-            sprintf(var, "{%s}", tmp);
+            var = ft_get_var(tmp);
+            // sprintf(var, "%s", );
             free(tmp);
             tmp = res;
             res = ft_strjoin(res, var);
+            free(var);
             free(tmp);
         } else {
             tmp = res;
@@ -50,15 +63,3 @@ char    *ft_convert_env(char *str)
     }
     return (res);
 }
-
-// char    *ft_get_var(char *name)
-// {
-//     char *res;
-//     t_list *lst;
-
-//     lst = g_env.env_head;
-//     while (lst)
-//     {
-        
-//     }
-// }
