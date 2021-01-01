@@ -26,6 +26,8 @@ int ft_syntax_error(char *token)
     g_minishell.return_code = 258;
     g_minishell.stat = 0;
     g_minishell.read_next = NULL;
+    // ft_lstclear(&g_minishell.cmd_head, ft_free_command);
+
     return (1);
 }
 
@@ -79,19 +81,11 @@ int    ft_handle_pipe(char *str)
 
 int    ft_handle_semi_column(char *str)
 {
-    // t_list      *item;
     t_command   *cmd;
-
-    // int         p[2];
     cmd = g_minishell.cmd_tail->content;
-    // if (pipe(p) < 0)
-        // ft_error("pipe error");
-    // cmd->outRed = 1;
     g_minishell.cmd_tail = ft_lstnew(ft_new_command(0, 1));
     ft_lstadd_back(&g_minishell.cmd_head, g_minishell.cmd_tail);
 
-    // ft_putstr_fd("SEMI-C:", 1);
-    // ft_putendl_fd(str, 1);
     str = NULL;
     g_minishell.read_next = NULL;
     g_minishell.pos++;
@@ -102,18 +96,9 @@ int    ft_handle_input_red(char *str)
 {
     if (g_minishell.read_next == INPUT_RED)
     {
-        // fd = open(str, O_RDONLY);
-        // if (fd == -1) {
-        //     ft_fprintf(2, "minishell: %s: %s\n", str, strerror(errno));
-        //     g_minishell.stat = 0;
-        // } else
-        //     ((t_command *)g_minishell.cmd_head->content)->inRed = fd;
-        ft_fprintf(1, "|%s|\n", str);
         ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->inFiles, ft_lstnew(str));
-        // free(str);
         g_minishell.read_next = NULL;
     } else {
-        // ft_putstr_fd("IN:", 1);
         g_minishell.read_next = INPUT_RED;
         g_minishell.pos++;
     }
@@ -124,16 +109,8 @@ int    ft_handle_output_red(char *str, char *app)
 {
     if (g_minishell.read_next == OUTPUT_RED)
     {
-        // fd = open(str, O_RDWR | O_CREAT |
-        //     (g_minishell.read_next == APP_OUTPUT_RED ? O_APPEND : 0), 0644);
-        // if (fd == -1) {
-        //     ft_fprintf(2, "minishell: %s: %s\n", str, strerror(errno));
-        //     g_minishell.stat = 0;
-        // } else
-        //     ((t_command *)g_minishell.cmd_head->content)->outRed = fd;
         t_list *tmp;
         ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->outFiles, (tmp = ft_lstnew(str)));
-        // ft_fprintf(1, "%p %s %p\n", str, str, tmp);
         g_minishell.read_next = NULL;
 
     } else if (g_minishell.read_next == APP_OUTPUT_RED) {
@@ -141,14 +118,11 @@ int    ft_handle_output_red(char *str, char *app)
         g_minishell.read_next = NULL;
     } else {
         if (app == APP_OUTPUT_RED) {
-            // ft_putstr_fd("AOUT:", 1);
             g_minishell.pos += 2;
         } else {
-            // ft_putstr_fd("OUT:", 1);
             g_minishell.pos++;
         }
         g_minishell.read_next = app;
-        // ft_putendl_fd(str, 1);
     }
     return (0);
 }

@@ -412,8 +412,10 @@ void    execute_commands()
         if ((ret = is_command(argv[0])))
         {
             treat_cmd(argv, ret);
+            free(argv);
             return ;
         }
+        free(argv);
 
         if (fork() == 0) {
             // ft_putendl_fd("FORK", 1);
