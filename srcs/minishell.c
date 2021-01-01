@@ -14,7 +14,7 @@
 
 void ft_exit() {
     ft_putendl_fd("exit", 1);
-    exit(2);
+    exit(0);
 }
 
 void    ft_error(char *str)
@@ -152,7 +152,7 @@ int     get_command_line(char **line)
         {
             if (ft_strncmp(*line, "", 1) == 0)
             {
-                if (g_minishell.stat == 1)
+                if (!ft_strequ(g_minishell.read_next, PIPE))
                     ft_exit();
                 ft_syntax_error("\x4");
                 break;
