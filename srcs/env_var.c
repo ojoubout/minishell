@@ -29,22 +29,19 @@ char    *ft_get_var(char *name)
 char    *ft_convert_env(char *str)
 {
     int     i;
-    int     on_dollar;
     char    *res;
     char    *tmp;
     char    *var;
     int     len;
 
     i = 0;
-    on_dollar = 0;
     res = ft_strdup("");
 
     while (str[i])
     {
-        if (ft_on_char(str, i, "$")) {
-            on_dollar = ++i;
+        if (ft_on_char(str, i, "$") && (len = ft_word_length(str + i + 1, env_sep)) > 0) {
+            i++;
             // len = get_next_word(&str[i], env_sep);
-            len = ft_word_length(str + i, env_sep);
             tmp = ft_substr(str, i, len);
             i += len;
             var = ft_get_var(tmp);
