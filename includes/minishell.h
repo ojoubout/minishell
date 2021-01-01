@@ -21,6 +21,7 @@
 #include <errno.h>
 #include <dirent.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 
 
 #define BCYN "\e[1;36m"

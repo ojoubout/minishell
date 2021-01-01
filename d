@@ -1,0 +1,16 @@
+Makefile
+README.md
+d
+env
+export
+ft_printf
+gnl
+includes
+libft
+minishell
+minishell.dSYM
+pwd
+srcs
+test
+test.c
+test.py

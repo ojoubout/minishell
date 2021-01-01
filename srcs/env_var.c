@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-char    *env_sep = "'\"$\\";
+char    *env_sep = "'\"$\\?";
 
 char    *ft_get_var(char *name)
 {
@@ -51,6 +51,13 @@ char    *ft_convert_env(char *str)
             res = ft_strjoin(res, var);
             free(var);
             free(tmp);
+        } else if (ft_on_char(str, i + 1, "?")) {
+            var = ft_itoa(g_minishell.return_code);
+            tmp = res;
+            res = ft_strjoin(res, var);
+            free(var);
+            free(tmp);
+            i += 2;
         } else {
             tmp = res;
             res = ft_strappend(res, str[i]);

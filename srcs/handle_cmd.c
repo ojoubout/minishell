@@ -14,12 +14,16 @@
 
 int ft_syntax_error(char *token)
 {
-    if (*token == '\n')
-        token = "newline";
-    else
-        token[1] = 0;
-    ft_fprintf(2, "minishell: syntax error near unexpected token `%s'\n",
-                token);
+    if (*token == '\x4')
+        ft_fprintf(2, "minishell: syntax error: unexpected end of file\n");
+    else {
+        if (*token == '\n')
+            token = "newline";
+        else
+            token[1] = 0;
+        ft_fprintf(2, "minishell: syntax error near unexpected token `%s'\n",
+                    token);
+    }
     // ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
     // ft_putstr_fd(token, 2);
     // ft_putendl_fd("'", 2);
@@ -43,7 +47,6 @@ int    ft_handle_cmd(char *str)
     free(str);
     str = arg;
     arg = ft_quotes_convert(arg);
-    // ft_fprintf(2, "%p\n", arg);
     free(str);
     if (ft_strequ(g_minishell.read_next, INPUT_RED))
         ft_handle_input_red(arg);
@@ -55,7 +58,8 @@ int    ft_handle_cmd(char *str)
         // ft_fprintf(1, "CMD %s %d\n", arg, cmd->inRed);
         ft_lstadd_back(&cmd->argv, ft_lstnew(arg));
         // ft_putendl_fd(arg, 1);
-    }
+    } else if (!arg[0])
+        free(arg);
     g_minishell.read_next = NULL;
     return (0);
 }
