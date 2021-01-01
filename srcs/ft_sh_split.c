@@ -41,6 +41,16 @@ int	ft_on_char(const char *str, int i, char *c)
 	return 0;
 }
 
+int	ft_strequ(char *s1, char *s2)
+{
+	int len;
+
+	if (!s1 || !s2)
+		return (0);
+	len = ft_strlen(s1);
+	return (ft_strncmp(s1, s2, len + 1) == 0);	
+}
+
 char	*ft_strappend(char *str, char c)
 {
 	char strchar[2];

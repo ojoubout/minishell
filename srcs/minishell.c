@@ -42,7 +42,7 @@ void    show_prompt(char *type)
     if (!type) {
         ft_fprintf(1, BBLU "minishell %d%s> "RESET, g_minishell.return_code,
                 g_minishell.return_code ? BRED : BGRN);
-    } else if (type == PIPE) {
+    } else if (ft_strequ(type, PIPE)) {
         ft_fprintf(1, "pipe > ");
     }
 }
@@ -108,7 +108,7 @@ int    ft_precess_cmd(char *str)
     cmd = g_minishell.cmd_tail->content;
     // ft_fprintf(1, "%s\n", str);
     if (((ft_strncmp(str, OUTPUT_RED, 1) == 0 || ft_strncmp(str, APP_OUTPUT_RED, 2) == 0 
-        || ft_strncmp(str, INPUT_RED, 1) == 0) && (g_minishell.read_next != NULL && g_minishell.read_next != PIPE)) ||
+        || ft_strncmp(str, INPUT_RED, 1) == 0) && (g_minishell.read_next != NULL && ft_strequ(g_minishell.read_next, PIPE))) ||
         ((ft_strncmp(str, PIPE, 1) == 0 || ft_strncmp(str, SEMI_COLUMN, 1) == 0) && 
         (g_minishell.read_next != NULL || cmd->argv == NULL)))
         return ft_syntax_error(str);
@@ -208,7 +208,7 @@ int     main(int argc, char **argv, char **env)
     g_minishell.return_code = 0;
     while (1)
     {
-        if (g_minishell.read_next == PIPE) {
+        if (ft_strequ(g_minishell.read_next, PIPE)) {
 
             show_prompt(PIPE);
             // g_minishell.cmd_head = ft_lstnew(ft_new_command(0, 1));
@@ -245,7 +245,7 @@ int     main(int argc, char **argv, char **env)
             g_minishell.pos += len;
             // g_minishell.pos++;
         }
-        if (g_minishell.stat && (g_minishell.read_next != NULL && g_minishell.read_next != PIPE))
+        if (g_minishell.stat && (g_minishell.read_next != NULL && !ft_strequ(g_minishell.read_next, PIPE)))
             ft_syntax_error("\n");
 
         // print_commands();

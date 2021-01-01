@@ -19,10 +19,10 @@ int     open_file(char *file, int flags, char *type)
     int         red;
 
     cmd = g_minishell.cmd_head->content;
-    red = type == INPUT_RED ? cmd->inRed : cmd->outRed;
+    red = ft_strequ(type, INPUT_RED) ? cmd->inRed : cmd->outRed;
     if (red != 1)
         close(red);
-    if (type == INPUT_RED)
+    if (ft_strequ(type, INPUT_RED))
         fd = open(file, flags);
     else
         fd = open(file, flags, 0644);

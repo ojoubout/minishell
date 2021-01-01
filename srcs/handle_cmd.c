@@ -45,9 +45,9 @@ int    ft_handle_cmd(char *str)
     arg = ft_quotes_convert(arg);
     // ft_fprintf(2, "%p\n", arg);
     free(str);
-    if (g_minishell.read_next == INPUT_RED)
+    if (ft_strequ(g_minishell.read_next, INPUT_RED))
         ft_handle_input_red(arg);
-    else if (g_minishell.read_next == OUTPUT_RED || g_minishell.read_next == APP_OUTPUT_RED)
+    else if (ft_strequ(g_minishell.read_next, OUTPUT_RED) || ft_strequ(g_minishell.read_next, APP_OUTPUT_RED))
         ft_handle_output_red(arg, g_minishell.read_next);
     else if (arg[0]) {
         // ft_putstr_fd("CMD:", 1);
@@ -94,7 +94,7 @@ int    ft_handle_semi_column(char *str)
 
 int    ft_handle_input_red(char *str)
 {
-    if (g_minishell.read_next == INPUT_RED)
+    if (ft_strequ(g_minishell.read_next, INPUT_RED))
     {
         ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->inFiles, ft_lstnew(str));
         g_minishell.read_next = NULL;
@@ -107,17 +107,17 @@ int    ft_handle_input_red(char *str)
 
 int    ft_handle_output_red(char *str, char *app)
 {
-    if (g_minishell.read_next == OUTPUT_RED)
+    if (ft_strequ(g_minishell.read_next, OUTPUT_RED))
     {
         t_list *tmp;
         ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->outFiles, (tmp = ft_lstnew(str)));
         g_minishell.read_next = NULL;
 
-    } else if (g_minishell.read_next == APP_OUTPUT_RED) {
+    } else if (ft_strequ(g_minishell.read_next, APP_OUTPUT_RED)) {
         ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->aoutFiles, ft_lstnew(str));
         g_minishell.read_next = NULL;
     } else {
-        if (app == APP_OUTPUT_RED) {
+        if (ft_strequ(app, APP_OUTPUT_RED)) {
             g_minishell.pos += 2;
         } else {
             g_minishell.pos++;
