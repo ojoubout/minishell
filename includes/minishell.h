@@ -105,6 +105,16 @@ int 		get_next_word(const char *str, char *d);
 char    	*ft_convert_env(char *str);
 char 		*get_home();
 t_list 		*lstchr(t_list *head, char *s);
+void 		ft_echo(char **argv);
+void 		ft_pwd(char **argv);
+void 		ft_cd(char **argv);
+void    	ft_export(char **argv);
+void 		ft_unset(char **argv);
+void 		ft_env(char **argv);
+void 		ft_exit_buildin(char **argv);
+
+
+
 // char	**ft_free(char **ptr, size_t size);
 int			ft_strequ(char *s1, char *s2);
 
