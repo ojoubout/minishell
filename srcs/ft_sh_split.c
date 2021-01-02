@@ -26,15 +26,36 @@ int		ft_is_backslashed(const char *str, int i)
 	return (is_backslashed);
 }
 
-int	ft_on_char(const char *str, int i, char *c)
+int		ft_is_quoted(const char *str, int i)
 {
+	int quote[2];
 	int j;
 
+	ft_bzero(quote, 2);
 	j = 0;
+	while (j < i)
+	{
+		if (!quote[0] && (str[j] == '"' || str[j] == '\'') && !ft_is_backslashed(str, j))
+			quote[0] = str[j];
+		else if ((quote[0] == '\'' && str[j] == '\'') ||
+		(quote[0] == '"' && str[j] == '\"' && !ft_is_backslashed(str, j)))
+			quote[0] = 0;
+		j++;
+	}
+	return (quote[0] == '\'');
+}
+
+int	ft_on_char(const char *str, int i, char *c)
+{
+	int		j;
+	char	*quote[2];
+
+	j = 0;
+	ft_bzero(quote, 2);
 	while (c[j])
 	{
 		if (str[i] == c[j])
-			if (i == 0 || !ft_is_backslashed(str, i))
+			if (i == 0 || (!ft_is_backslashed(str, i) && !ft_is_quoted(str, i)))
 				return 1;
 		j++;
 	}
@@ -72,12 +93,12 @@ char	*ft_quotes_convert(char *str)
 	res = ft_strdup("");
 	while (str[i])
 	{
-		if (ft_on_char(str, i, "\\"))
+		if (quote[0] != '\'' && ft_on_char(str, i, "\\"))
 		{
 			i++;
 			continue;
 		}
-		if ((!quote[0] || ft_on_char(str, i, quote)) && ft_on_char(str, i, "'\""))
+		if (!quote[0] || ft_on_char(str, i, quote))
 		{
 			quote[0] = quote[0] ? 0 : str[i];
         } else {
