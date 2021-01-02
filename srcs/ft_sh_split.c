@@ -33,7 +33,7 @@ int		ft_is_quoted(const char *str, int i)
 
 	ft_bzero(quote, 2);
 	j = 0;
-	while (j < i)
+	while (j <= i)
 	{
 		if (!quote[0] && (str[j] == '"' || str[j] == '\'') && !ft_is_backslashed(str, j))
 			quote[0] = str[j];
@@ -98,7 +98,7 @@ char	*ft_quotes_convert(char *str)
 			i++;
 			continue;
 		}
-		if (!quote[0] || ft_on_char(str, i, quote))
+		if ((!quote[0] && ft_on_char(str, i, "'\"")) || ft_on_char(str, i, quote))
 		{
 			quote[0] = quote[0] ? 0 : str[i];
         } else {
