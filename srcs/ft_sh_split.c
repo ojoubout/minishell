@@ -77,18 +77,14 @@ char	*ft_quotes_convert(char *str)
 			i++;
 			continue;
 		}
-		if (!quote[0] || ft_on_char(str, i, quote))
+		if ((!quote[0] || ft_on_char(str, i, quote)) && ft_on_char(str, i, "'\""))
 		{
-			if (ft_on_char(str, i, "'\"")) {
-                quote[0] = quote[0] ? 0 : str[i];
-				i++;
-				if (!str[i])
-					break;
-			}
-        }
-		tmp = res;
-		res = ft_strappend(res, str[i]);
-		free(tmp);
+			quote[0] = quote[0] ? 0 : str[i];
+        } else {
+			tmp = res;
+			res = ft_strappend(res, str[i]);
+			free(tmp);
+		}
         i++;
 	}
 	return (res);
