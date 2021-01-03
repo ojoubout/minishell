@@ -12,10 +12,10 @@
 
 #include "minishell.h"
 
-void ft_exit() {
-    ft_putendl_fd("exit", 1);
-    exit(0);
-}
+// void ft_exit() {
+//     ft_putendl_fd("exit", 1);
+//     exit(0);
+// }
 
 void    ft_error(char *str)
 {
@@ -37,11 +37,39 @@ t_command   *ft_new_command(int in, int out)
     return (cmd);
 }
 
+char *ft_getcwd()
+{
+    char    *cwd;
+    char    *home;
+    char    *res;
+    int     len;
+
+    cwd = getcwd(NULL, 0);
+    home = ft_get_var("HOME");
+    len = ft_strlen(home);
+    res = "~";
+    if (len && ft_strncmp(home, cwd, len) == 0)
+    {
+        free(home);
+        home = ft_substr(cwd, len, ft_strlen(cwd) - len);
+        res = ft_strjoin(res, home);
+    }
+    else
+        res = getcwd(NULL, 0);
+    free(home);
+    free(cwd);
+    return (res);
+}
+
 void    show_prompt(char *type)
 {
+    char    *cwd;
+
     if (!type) {
-        ft_fprintf(1, BBLU "minishell %d%s> "RESET, g_minishell.return_code,
+        cwd = ft_getcwd();
+        ft_fprintf(1, BBLU "%s %d%s> "RESET, cwd, g_minishell.return_code,
                 g_minishell.return_code ? BRED : BGRN);
+        free(cwd);
     } else if (ft_strequ(type, PIPE)) {
         ft_fprintf(1, "pipe > ");
     }
@@ -153,7 +181,7 @@ int     get_command_line(char **line)
             if (ft_strncmp(*line, "", 1) == 0)
             {
                 if (!ft_strequ(g_minishell.read_next, PIPE))
-                    ft_exit();
+                    ft_exit(NULL);
                 ft_syntax_error("\x4");
                 break;
             }

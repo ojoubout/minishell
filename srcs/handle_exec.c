@@ -85,7 +85,7 @@ void treat_cmd(char **argv, int cmd_id)
     else if (cmd_id == 6)
         ft_env(argv);
     else if (cmd_id == 7)
-        ft_exit_builtin(argv);
+        ft_exit(argv);
 }
 
 int ft_try_path(char **argv)
@@ -183,7 +183,7 @@ void    execute_commands()
         
         if ((ret = is_command(argv[0])))
         {
-            open_redirect_files(cmd);
+            // open_redirect_files(cmd);
             int in;
             int out;
             in = dup(0);
@@ -193,6 +193,11 @@ void    execute_commands()
             treat_cmd(argv, ret);
             dup2(in, 0);
             dup2(out, 1);
+            if (cmd->inRed != 0)
+                close(cmd->inRed);
+            if (cmd->outRed != 1)
+                close(cmd->outRed);
+
             free(argv);
         } else {
             free(argv);
@@ -204,7 +209,6 @@ void    execute_commands()
             }
             else
             {
-                free_redirect_files();
                 g_minishell.forked = 1;
                 wait(&ret);
                 // char *s = (char *)&ret;
@@ -220,5 +224,6 @@ void    execute_commands()
         }
         lst = lst->next;
     }
+    free_redirect_files();
     // ft_lstiter(g_minishell.cmd_head, execute_command);
 }

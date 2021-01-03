@@ -26,11 +26,11 @@ int ft_isnumber(char *s)
     return (1);
 }
 
-void ft_exit_builtin(char **argv)
+void ft_exit(char **argv)
 {
     int ret;
 
-    if (!argv[1])
+    if (!argv || !argv[1])
     {
         ft_fprintf(2, "exit\n"); 
         exit(0);

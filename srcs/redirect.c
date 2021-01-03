@@ -83,7 +83,6 @@ static void ft_free(void *ptr)
 }
 void    open_redirect_files(t_command *cmd)
 {
-
     ft_lstiter(cmd->inFiles, open_input_file, cmd);
     ft_lstiter(cmd->outFiles, open_out_file, cmd);
     ft_lstiter(cmd->aoutFiles, open_aout_file, cmd);

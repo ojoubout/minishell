@@ -112,10 +112,11 @@ void    	ft_export(char **argv);
 void		export_all(char **argv);
 void 		ft_unset(char **argv);
 void 		ft_env(char **argv);
-void		ft_exit_builtin(char **argv);
+void		ft_exit(char **argv);
+void		ft_free_split(char **split);
 int			ft_ptr_str_len(char **ptr);
 char		*get_path();
-
+char    	*ft_get_var(char *name);
 
 
 // char	**ft_free(char **ptr, size_t size);
