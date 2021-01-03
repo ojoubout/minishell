@@ -85,18 +85,22 @@ void treat_cmd(char **argv, int cmd_id)
     else if (cmd_id == 6)
         ft_env(argv);
     else if (cmd_id == 7)
-        ft_exit_buildin(argv);
+        ft_exit_builtin(argv);
 }
 
 int ft_try_path(char **argv)
 {
     int i;
     struct stat sb;
-    char *env_args[] = { (char*)0 };
+    char **env_args = ft_lst_to_array(g_env.env_head);
     char *s = NULL;
+    char **pfree;
     char     *tmp;
 
     i = 0;
+    pfree = g_env.path;
+    g_env.path = ft_split(get_path(), ':');
+    free(pfree);
     // printf("%s", argv[0]);
     while (g_env.path[i])
     {
@@ -120,7 +124,7 @@ int ft_try_path(char **argv)
 void ft_redirect(char **argv)
 {
     int cmd_id;
-    char *env_args[] = { (char*)0 };
+    char **env_args = ft_lst_to_array(g_env.env_head);
     struct stat sb;
     if ((cmd_id = is_command(argv[0])))
     {
@@ -152,8 +156,6 @@ void    execute_command(t_command *cmd)
     // path = ft_strjoin("/bin/", argv[0]);
     // char *env_args[] = { (char*)0 };
     // printf("|%s %d %d|\n", cmd->argv->content, cmd->inRed, cmd->outRed);
-    // ft_fprintf(2, "%d:%d\n", cmd->inRed, cmd->outRed);
-
     open_redirect_files(cmd);
     dup2(cmd->inRed, 0);
     dup2(cmd->outRed, 1);
@@ -181,12 +183,13 @@ void    execute_commands()
         
         if ((ret = is_command(argv[0])))
         {
+            open_redirect_files(cmd);
+            dup2(cmd->inRed, 0);
+            dup2(cmd->outRed, 1);
             treat_cmd(argv, ret);
             free(argv);
-        }
-        else {
+        } else {
             free(argv);
-
             if (fork() == 0) {
                 // ft_putendl_fd("FORK", 1);
                 signal(SIGINT, SIG_DFL);
@@ -209,7 +212,7 @@ void    execute_commands()
                 g_minishell.forked = 0;
             }
         }
-		lst = lst->next;
-	}
+        lst = lst->next;
+    }
     // ft_lstiter(g_minishell.cmd_head, execute_command);
 }

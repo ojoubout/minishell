@@ -112,8 +112,13 @@ void    	ft_export(char **argv);
 void		export_all(char **argv);
 void 		ft_unset(char **argv);
 void 		ft_env(char **argv);
-void 		ft_exit_buildin(char **argv);
-void		ft_free_split(char **split);
+void		ft_exit_builtin(char **argv);
+int			ft_ptr_str_len(char **ptr);
+char		*get_path();
+
+
+
+// char	**ft_free(char **ptr, size_t size);
 int			ft_strequ(char *s1, char *s2);
 
 #endif
