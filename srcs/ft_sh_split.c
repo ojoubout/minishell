@@ -166,6 +166,19 @@ int	ft_word_length(const char *s, char *c)
 	return (i);
 }
 
+void	ft_free_split(char **split)
+{
+	size_t	i;
+
+	i = 0;
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
+}
+
 static char	**ft_free(char **ptr, size_t size)
 {
 	size_t	i;

@@ -225,6 +225,7 @@ void export_all(char **argv)
             export_empty_string(argv, sp, i);
         else                                                           //export ll=normal
             export_normal(argv, sp, i);
+        ft_free_split(sp);
         i++;
     }
     // if (!sp)

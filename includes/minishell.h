@@ -113,10 +113,7 @@ void		export_all(char **argv);
 void 		ft_unset(char **argv);
 void 		ft_env(char **argv);
 void 		ft_exit_buildin(char **argv);
-
-
-
-// char	**ft_free(char **ptr, size_t size);
+void		ft_free_split(char **split);
 int			ft_strequ(char *s1, char *s2);
 
 #endif
