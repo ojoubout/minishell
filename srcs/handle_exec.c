@@ -184,9 +184,15 @@ void    execute_commands()
         if ((ret = is_command(argv[0])))
         {
             open_redirect_files(cmd);
+            int in;
+            int out;
+            in = dup(0);
+            out = dup(1);
             dup2(cmd->inRed, 0);
             dup2(cmd->outRed, 1);
             treat_cmd(argv, ret);
+            dup2(in, 0);
+            dup2(out, 1);
             free(argv);
         } else {
             free(argv);
