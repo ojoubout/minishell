@@ -23,7 +23,7 @@ void    ft_error(char *str)
     exit(1);
 }
 
-t_command   *ft_new_command(int in, int out)
+t_command   *ft_new_command(int in, int out, int pipe)
 {
     t_command   *cmd;
 
@@ -31,9 +31,12 @@ t_command   *ft_new_command(int in, int out)
     cmd->argv = NULL;
     cmd->inRed = in;
     cmd->outRed = out;
+    // ft_fprintf(2, "IN %d OUT %d", in, out);
     cmd->inFiles = NULL;
     cmd->outFiles = NULL;
     cmd->aoutFiles = NULL;
+    cmd->pipe[0] = -1;
+    cmd->pipe[1] = pipe;
     return (cmd);
 }
 
@@ -67,11 +70,11 @@ void    show_prompt(char *type)
 
     if (!type) {
         cwd = ft_getcwd();
-        ft_fprintf(1, BBLU "%s %d%s> "RESET, cwd, g_minishell.return_code,
+        ft_fprintf(2, BBLU "%s %d%s> "RESET, cwd, g_minishell.return_code,
                 g_minishell.return_code ? BRED : BGRN);
         free(cwd);
     } else if (ft_strequ(type, PIPE)) {
-        ft_fprintf(1, "pipe > ");
+        ft_fprintf(2, "pipe > ");
     }
 }
 
@@ -158,12 +161,14 @@ int    ft_precess_cmd(char *str)
 
 void    init()
 {
-    g_minishell.cmd_head = ft_lstnew(ft_new_command(0, 1));
+    g_minishell.cmd_head = ft_lstnew(ft_new_command(0, 1, -1));
     g_minishell.cmd_tail = g_minishell.cmd_head;
     g_minishell.stat = 1;
     g_minishell.forked = 0;
     g_minishell.read_next = NULL;
     g_minishell.pos = 0;
+    g_fds = NULL;
+    g_pipes = NULL;
 }
 
 int     get_command_line(char **line) 
@@ -287,7 +292,13 @@ int     main(int argc, char **argv, char **env)
         if (g_minishell.stat && g_minishell.read_next == NULL)
             execute_commands();
         if (!ft_strequ(g_minishell.read_next, PIPE))
+        {
             ft_lstclear(&g_minishell.cmd_head, ft_free_command);
+            if (g_fds)
+                ft_lstclear(&g_fds, ft_free);
+            if (g_pipes)
+                ft_lstclear(&g_pipes, ft_free);
+        }
         free(g_minishell.command_line);
         g_minishell.command_line = NULL;
     }

@@ -68,14 +68,22 @@ int    ft_handle_pipe(char *str)
     // t_list      *item;
     t_command   *cmd;
     int         p[2];
+    int         *store_pipe;
 
     cmd = g_minishell.cmd_tail->content;
     if (pipe(p) < 0)
         ft_error("pipe error");
+
     cmd->outRed = p[1];
+    cmd->pipe[0] = p[0];
+    // ft_fprintf(2, "PIPE %d %d\n", p[0], p[1]);
     // ft_fprintf(1, "PIPE %d\n", p[0]);
-    g_minishell.cmd_tail = ft_lstnew(ft_new_command(p[0], 1));
+    g_minishell.cmd_tail = ft_lstnew(ft_new_command(p[0], 1, p[1]));
     ft_lstadd_back(&g_minishell.cmd_head, g_minishell.cmd_tail);
+    store_pipe = malloc(2 * sizeof(int));
+    store_pipe[0] = p[0];
+    store_pipe[1] = p[1];
+    ft_lstadd_back(&g_pipes, ft_lstnew(store_pipe));
     str = NULL;
     g_minishell.read_next = PIPE;
     g_minishell.pos++;
@@ -86,7 +94,7 @@ int    ft_handle_semi_column(char *str)
 {
     t_command   *cmd;
     cmd = g_minishell.cmd_tail->content;
-    g_minishell.cmd_tail = ft_lstnew(ft_new_command(0, 1));
+    g_minishell.cmd_tail = ft_lstnew(ft_new_command(0, 1, -1));
     ft_lstadd_back(&g_minishell.cmd_head, g_minishell.cmd_tail);
 
     str = NULL;

@@ -166,12 +166,102 @@ void    execute_command(t_command *cmd)
     exit(127);
 }
 
+void    ft_close_pipe(t_command *cmd)
+{
+    if (cmd->inRed != 0)
+    {
+        close(cmd->inRed);
+        ft_fprintf(2, "CLOSE INPUT");
+    }
+    if (cmd->outRed != 1)
+    {
+        close(cmd->outRed);
+        ft_fprintf(2, "CLOSE OUTPUT");
+    }
+}
+
+int    ft_wait()
+{
+    int         ret;
+    int         pid;
+
+    pid = wait(&ret);
+    // char *s = (char *)&ret;
+    // ft_fprintf(1, "%d %d %d %d\n", s[0], s[1], s[2], s[3]);
+    if (WIFEXITED(ret))
+        g_minishell.return_code = WEXITSTATUS(ret);
+    // ft_close_pipe(cmd);
+    g_minishell.forked = 0;
+    return (pid);
+}
+
+int     *ft_new_fd(int in, int out, int pid)
+{
+    int *fds;
+
+    fds = malloc(3 * sizeof(int));
+    fds[0] = in;
+    fds[1] = out;
+    // fds[2] = pipe;
+    fds[2] = pid;
+    return (fds);
+}
+
+void    ft_close_fds(int pid)
+{
+    t_list *lst;
+    int     *fds;
+
+    lst = g_fds;
+    while (lst)
+    {
+        fds = lst->content;
+        if (fds[2] == pid)
+        {
+            if (fds[0] != 0)
+            {
+                close(fds[0]);
+                // ft_fprintf(2, "FREE IN %d\n", fds[0]);
+            }
+            if (fds[1] != 1)
+            {
+                close(fds[1]);
+                // ft_fprintf(2, "FREE OUT %d\n", fds[1]);
+            }
+            break;
+        }
+        lst = lst->next;
+    }
+    // if (fds[2] != 0 && fds[2] != 1)
+    // {
+    //     close(fds[2]);
+    //     ft_fprintf(2, "FREE PIPE %d\n", fds[2]);
+    // }
+}
+
+void ft_close_pipes()
+{
+    t_list *lst;
+    int     *pipes;
+
+    lst = g_pipes;
+    while (lst)
+    {
+        pipes = lst->content;
+        close(pipes[0]);
+        close(pipes[1]);
+        // ft_fprintf(2, "CLOSE %d %d\n", pipes[0], pipes[1]);
+        lst = lst->next;
+    }
+}
+
 void    execute_commands()
 {
     t_list  *lst;
     t_command   *cmd;
     int         ret;
     char        **argv;
+    int         n = 0;
 
     lst = g_minishell.cmd_head;
     while (lst != NULL)
@@ -184,6 +274,7 @@ void    execute_commands()
         if ((ret = is_command(argv[0])))
         {
             // open_redirect_files(cmd);
+            // close(cmd->pipe);
             int in;
             int out;
             in = dup(0);
@@ -201,7 +292,19 @@ void    execute_commands()
             free(argv);
         } else {
             free(argv);
-            if (fork() == 0) {
+            if ((ret = fork()) == 0) {
+                if (cmd->pipe[0] != -1)
+                {
+                    close(cmd->pipe[0]);
+                    // ft_fprintf(2, "CLOSE INPUT PIPE %d\n", cmd->pipe[0]);
+                }
+                if (cmd->pipe[1] != -1)
+                {
+                    close(cmd->pipe[1]);
+                    // ft_fprintf(2, "CLOSE OUTPUT PIPE %d\n", cmd->pipe[1]);
+                }
+                // ft_fprintf(2, "CMD: %d %s %d %d\n", ret, cmd->argv->content, cmd->inRed, cmd->outRed);
+                // ft_fprintf(2, "FREE D %d\n", cmd->pipe);
                 // ft_putendl_fd("FORK", 1);
                 signal(SIGINT, SIG_DFL);
                 // print_command(cmd);
@@ -209,21 +312,49 @@ void    execute_commands()
             }
             else
             {
-                g_minishell.forked = 1;
-                wait(&ret);
-                // char *s = (char *)&ret;
-                // ft_fprintf(1, "%d %d %d %d\n", s[0], s[1], s[2], s[3]);
-                if (WIFEXITED(ret))
-                    g_minishell.return_code = WEXITSTATUS(ret);
                 if (cmd->inRed != 0)
+                {
                     close(cmd->inRed);
+                    // ft_fprintf(2, "CLOSE MAIN INPUT PIPE %d\n", cmd->inRed);
+                }
                 if (cmd->outRed != 1)
+                {
                     close(cmd->outRed);
-                g_minishell.forked = 0;
+                    // ft_fprintf(2, "CLOSE MAIN OUTPUT PIPE %d\n", cmd->outRed);
+
+                }
+
+                // ft_fprintf(2, "INPUT \n");
+                g_minishell.forked = 1;
+                n++;
+                // printf("CMD: %d %s %d %d\n", ret, cmd->argv->content, cmd->inRed, cmd->outRed);
+                // ft_fprintf(2, "CMD: %d %s %d %d\n", ret, cmd->argv->content, cmd->inRed, cmd->outRed);
+                // ft_lstadd_back(&g_fds, ft_lstnew(ft_new_fd(cmd->inRed, cmd->outRed, ret)));
+                // if (cmd->pipe) {
+                //     ft_wait(cmd);
+                // }
             }
         }
         lst = lst->next;
+        // if (!lst)
+            // ft_wait(cmd);
     }
+    // lst = g_fds;
+    // ft_fprintf(2, "FINISH 1 \n");
+    // ft_close_pipes();
+    while (n--)
+    {
+        // ft_fprintf(2, "WAIT \n");
+        ft_wait();
+        // ft_close_fds(pid);
+        // ft_fprintf(2, "FWAIT %d \n", pid);
+        // lst = lst->next;
+    }
+    // ft_fprintf(2, "FINISH 2 \n");
+    // write(2, "ERR\n", 4);
     free_redirect_files();
+
+    // ft_fprintf(2, "FINISH 3 \n");
+
     // ft_lstiter(g_minishell.cmd_head, execute_command);
 }

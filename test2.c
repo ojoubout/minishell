@@ -5,12 +5,12 @@
 
 int main(int argc, char **argv, char **env) {
 	
-	int b;
-	write(2, "start\n", 6);
-	while (read(0, &b, 1) > 0)
+	int b = 0;
+	write(2, "START\n", 6);
+	while (b < 1000000000)
 	{
-		write(2, &b, 1);
+		b++;
 	}
-	write(2, "finish\n", 7);
-	return (4);
+	write(1, "FINISH\n", 7);
+	return (5);
 }

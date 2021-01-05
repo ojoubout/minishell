@@ -65,6 +65,7 @@ typedef struct  s_command
 	t_list  *inFiles;
 	int     outRed;
 	int     inRed;
+	int		pipe[2];
 	// char    *read_next;
 }               t_command;
 
@@ -77,6 +78,8 @@ typedef struct  s_command
 
 t_minishell g_minishell;
 t_env g_env;
+t_list		*g_fds;
+t_list		*g_pipes;
 
 int         ft_handle_cmd(char *str);
 int         ft_handle_pipe(char *str);
@@ -85,7 +88,7 @@ int         ft_handle_output_red(char *str, char *app);
 int         ft_handle_semi_column(char *str);
 
 void        ft_error(char *str);
-t_command   *ft_new_command(int in, int out);
+t_command   *ft_new_command(int in, int out, int pipe);
 int         ft_syntax_error(char *token);
 
 int			ft_on_char(const char *str, int i, char *c);
@@ -117,7 +120,8 @@ void		ft_free_split(char **split);
 int			ft_ptr_str_len(char **ptr);
 char		*get_path();
 char    	*ft_get_var(char *name);
-
+void 		ft_free(void *ptr);
+int     	*ft_new_fd(int in, int out, int pid);
 
 // char	**ft_free(char **ptr, size_t size);
 int			ft_strequ(char *s1, char *s2);
