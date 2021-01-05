@@ -51,19 +51,19 @@ t_list *ft_array_to_lst(char **array)
 
 int is_command(char *s)
 {
-    if (!strcmp(s, "echo"))
+    if (ft_strequ(s, "echo"))
         return (1);
-    if (!strcmp(s, "cd"))
+    if (ft_strequ(s, "cd"))
         return (2);
-    if (!strcmp(s, "pwd"))
+    if (ft_strequ(s, "pwd"))
         return (3);
-    if (!strcmp(s, "export"))
+    if (ft_strequ(s, "export"))
         return (4);
-    if (!strcmp(s, "unset"))
+    if (ft_strequ(s, "unset"))
         return (5);
-    if (!strcmp(s, "env"))
+    if (ft_strequ(s, "env"))
         return (6);
-    if (!strcmp(s, "exit"))
+    if (ft_strequ(s, "exit"))
         return (7);
     return (0);
 }
@@ -193,7 +193,12 @@ void    execute_commands()
         if (!(cmd = (t_command *)lst->content) || !cmd->argv)
             break;
         argv = ft_lst_to_array(cmd->argv);
-        
+        if (cmd->inRed == 0)
+        {
+            while (n--)
+                ft_wait();
+            n = 0;
+        }
         if ((ret = is_command(argv[0])))
         {
             // open_redirect_files(cmd);
@@ -240,5 +245,6 @@ void    execute_commands()
     }
     while (n--)
         ft_wait();
+
     free_redirect_files();
 }

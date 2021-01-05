@@ -235,6 +235,8 @@ char *get_from_env(char *s)
 
 int     main(int argc, char **argv, char **env)
 {
+    char    *old_cmd;
+
     g_env.env_head = ft_array_to_lst(env);
     g_env.path = ft_split(get_path(), ':');
     argc = 0;
@@ -260,9 +262,8 @@ int     main(int argc, char **argv, char **env)
             // g_minishell.command_line = get_command_line();
             get_command_line(&g_minishell.command_line);
         }
-        char *tmp = g_minishell.command_line;
-        g_minishell.command_line = ft_convert_env(tmp);
-        free(tmp);
+        old_cmd = g_minishell.command_line;
+        g_minishell.command_line = ft_convert_env(old_cmd);
         // get_next_line(0, &g_minishell.command_line);
         // if (r == 0 && !g_minishell.command_line)
             // ft_exit();
@@ -292,6 +293,7 @@ int     main(int argc, char **argv, char **env)
         if (!ft_strequ(g_minishell.read_next, PIPE))
             ft_lstclear(&g_minishell.cmd_head, ft_free_command);
         free(g_minishell.command_line);
+        free(old_cmd);
         g_minishell.command_line = NULL;
     }
     return (g_minishell.return_code);
