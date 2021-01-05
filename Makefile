@@ -6,7 +6,7 @@
 #    By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/10 10:53:07 by ojoubout          #+#    #+#              #
-#    Updated: 2021/01/03 14:46:38 by ojoubout         ###   ########.fr        #
+#    Updated: 2019/11/23 22:10:50 by ojoubout         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRC += gnl/get_next_line.c
 
 OBJ = $(SRC:.c=.o)
 
-FLAGS=-Wall -Wextra -Werror -fsanitize=address -g
+FLAGS=-Wall -Wextra -Werror -g3 -fsanitize=address
 
 all: $(NAME)
 

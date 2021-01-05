@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 // void ft_exit() {
 //     ft_putendl_fd("exit", 1);
@@ -217,16 +217,16 @@ char *get_path()
     return (NULL);
 }
 
-char *get_home()
+char *get_from_env(char *s)
         {
     t_list *curr;
 
     curr = g_env.env_head;
     while (curr)
         {
-        if (!strncmp(curr->content, "HOME", 4))
+        if (!strncmp(curr->content, s, ft_strlen(s)))
         {
-            return (curr->content + 5);
+            return (curr->content + ft_strlen(s) + 1);
         }
         curr = curr ->next;
     }
@@ -290,11 +290,9 @@ int     main(int argc, char **argv, char **env)
         if (g_minishell.stat && g_minishell.read_next == NULL)
             execute_commands();
         if (!ft_strequ(g_minishell.read_next, PIPE))
-        {
             ft_lstclear(&g_minishell.cmd_head, ft_free_command);
-        }
         free(g_minishell.command_line);
         g_minishell.command_line = NULL;
     }
-    return (EXIT_SUCCESS);
+    return (g_minishell.return_code);
 }

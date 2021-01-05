@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 
 char    **ft_lst_to_array(t_list    *lst)
@@ -70,12 +70,12 @@ int is_command(char *s)
 
 
 
-void treat_cmd(char **argv, int cmd_id)
+int treat_cmd(char **argv, int cmd_id)
 {
     if (cmd_id == 1)
         ft_echo(argv);
     else if (cmd_id == 2)
-        ft_cd(argv);
+        return(ft_cd(argv));
     else if (cmd_id == 3)
         ft_pwd(argv);
     else if (cmd_id == 4)
@@ -85,7 +85,8 @@ void treat_cmd(char **argv, int cmd_id)
     else if (cmd_id == 6)
         ft_env(argv);
     else if (cmd_id == 7)
-        ft_exit(argv);
+        return(ft_exit(argv));
+    return (0);
 }
 
 int ft_try_path(char **argv)
@@ -123,14 +124,9 @@ int ft_try_path(char **argv)
 
 void ft_redirect(char **argv)
 {
-    int cmd_id;
     char **env_args = ft_lst_to_array(g_env.env_head);
     struct stat sb;
-    if ((cmd_id = is_command(argv[0])))
-    {
-        treat_cmd(argv, cmd_id);
-        return ;
-    }
+
     if (stat(argv[0], &sb) == 0 && sb.st_mode & S_IXUSR)
     {
         execve(argv[0], argv, env_args);
@@ -143,6 +139,22 @@ void ft_redirect(char **argv)
     }
     ft_fprintf(2, "minishell: %s: command not found\n", argv[0]);
 }
+
+static int    ft_wait()
+{
+    int         ret;
+    int         pid;
+
+    pid = wait(&ret);
+    // char *s = (char *)&ret;
+    // ft_fprintf(1, "%d %d %d %d\n", s[0], s[1], s[2], s[3]);
+    if (WIFEXITED(ret))
+        g_minishell.return_code = WEXITSTATUS(ret);
+    // ft_close_pipe(cmd);
+    g_minishell.forked = 0;
+    return (pid);
+}
+
 
 void    execute_command(t_command *cmd)
 {
@@ -164,47 +176,6 @@ void    execute_command(t_command *cmd)
     // ft_putstr_fd("minishell: command not found: ", 2);
     // ft_putendl_fd(argv[0], 2);
     exit(127);
-}
-
-void    ft_close_pipe(t_command *cmd)
-{
-    if (cmd->inRed != 0)
-    {
-        close(cmd->inRed);
-        ft_fprintf(2, "CLOSE INPUT");
-    }
-    if (cmd->outRed != 1)
-    {
-        close(cmd->outRed);
-        ft_fprintf(2, "CLOSE OUTPUT");
-    }
-}
-
-int    ft_wait()
-{
-    int         ret;
-    int         pid;
-
-    pid = wait(&ret);
-    // char *s = (char *)&ret;
-    // ft_fprintf(1, "%d %d %d %d\n", s[0], s[1], s[2], s[3]);
-    if (WIFEXITED(ret))
-        g_minishell.return_code = WEXITSTATUS(ret);
-    // ft_close_pipe(cmd);
-    g_minishell.forked = 0;
-    return (pid);
-}
-
-int     *ft_new_fd(int in, int out, int pid)
-{
-    int *fds;
-
-    fds = malloc(3 * sizeof(int));
-    fds[0] = in;
-    fds[1] = out;
-    // fds[2] = pipe;
-    fds[2] = pid;
-    return (fds);
 }
 
 void    execute_commands()
@@ -233,7 +204,7 @@ void    execute_commands()
             out = dup(1);
             dup2(cmd->inRed, 0);
             dup2(cmd->outRed, 1);
-            treat_cmd(argv, ret);
+            g_minishell.return_code = treat_cmd(argv, ret);
             dup2(in, 0);
             dup2(out, 1);
             if (cmd->inRed != 0)
