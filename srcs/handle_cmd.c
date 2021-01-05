@@ -83,7 +83,6 @@ int    ft_handle_pipe(char *str)
     store_pipe = malloc(2 * sizeof(int));
     store_pipe[0] = p[0];
     store_pipe[1] = p[1];
-    ft_lstadd_back(&g_pipes, ft_lstnew(store_pipe));
     str = NULL;
     g_minishell.read_next = PIPE;
     g_minishell.pos++;

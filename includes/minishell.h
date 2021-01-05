@@ -78,8 +78,6 @@ typedef struct  s_command
 
 t_minishell g_minishell;
 t_env g_env;
-t_list		*g_fds;
-t_list		*g_pipes;
 
 int         ft_handle_cmd(char *str);
 int         ft_handle_pipe(char *str);

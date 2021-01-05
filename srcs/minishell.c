@@ -167,8 +167,6 @@ void    init()
     g_minishell.forked = 0;
     g_minishell.read_next = NULL;
     g_minishell.pos = 0;
-    g_fds = NULL;
-    g_pipes = NULL;
 }
 
 int     get_command_line(char **line) 
@@ -294,10 +292,6 @@ int     main(int argc, char **argv, char **env)
         if (!ft_strequ(g_minishell.read_next, PIPE))
         {
             ft_lstclear(&g_minishell.cmd_head, ft_free_command);
-            if (g_fds)
-                ft_lstclear(&g_fds, ft_free);
-            if (g_pipes)
-                ft_lstclear(&g_pipes, ft_free);
         }
         free(g_minishell.command_line);
         g_minishell.command_line = NULL;
