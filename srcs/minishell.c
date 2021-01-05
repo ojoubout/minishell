@@ -32,9 +32,7 @@ t_command   *ft_new_command(int in, int out, int pipe)
     cmd->inRed = in;
     cmd->outRed = out;
     // ft_fprintf(2, "IN %d OUT %d", in, out);
-    cmd->inFiles = NULL;
-    cmd->outFiles = NULL;
-    cmd->aoutFiles = NULL;
+    cmd->redFiles = NULL;
     cmd->pipe[0] = -1;
     cmd->pipe[1] = pipe;
     return (cmd);

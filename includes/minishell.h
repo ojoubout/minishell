@@ -60,14 +60,21 @@ typedef struct  s_command
 {
 	t_list  *argv;
 	// char    **argv;
-	t_list  *outFiles;
-	t_list  *aoutFiles;
-	t_list  *inFiles;
+	t_list  *redFiles;
+	// t_list  *aoutFiles;
+	// t_list  *inFiles;
 	int     outRed;
 	int     inRed;
 	int		pipe[2];
 	// char    *read_next;
 }               t_command;
+
+typedef struct  s_red_file
+{
+	char	*file;
+	char	type;
+}               t_red_file;
+
 
 // typedef struct  s_cmd_list
 // {

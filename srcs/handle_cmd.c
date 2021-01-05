@@ -69,7 +69,6 @@ int    ft_handle_pipe(char *str)
     // t_list      *item;
     t_command   *cmd;
     int         p[2];
-    // int         *store_pipe;
 
     cmd = g_minishell.cmd_tail->content;
     if (pipe(p) < 0)
@@ -81,13 +80,20 @@ int    ft_handle_pipe(char *str)
     // ft_fprintf(1, "PIPE %d\n", p[0]);
     g_minishell.cmd_tail = ft_lstnew(ft_new_command(p[0], 1, p[1]));
     ft_lstadd_back(&g_minishell.cmd_head, g_minishell.cmd_tail);
-    // store_pipe = malloc(2 * sizeof(int));
-    // store_pipe[0] = p[0];
-    // store_pipe[1] = p[1];
     str = NULL;
     g_minishell.read_next = PIPE;
     g_minishell.pos++;
     return (0);
+}
+
+static t_red_file   *ft_red_file(char *file, char type)
+{
+    t_red_file  *red_file;
+
+    red_file = malloc(sizeof(t_red_file));
+    red_file->file = file;
+    red_file->type = type;
+    return (red_file);
 }
 
 int    ft_handle_semi_column(char *str)
@@ -107,7 +113,7 @@ int    ft_handle_input_red(char *str)
 {
     if (ft_strequ(g_minishell.read_next, INPUT_RED))
     {
-        ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->inFiles, ft_lstnew(str));
+        ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->redFiles, ft_lstnew(ft_red_file(str, 0)));
         g_minishell.read_next = NULL;
     } else {
         g_minishell.read_next = INPUT_RED;
@@ -122,12 +128,12 @@ int    ft_handle_output_red(char *str, char *app)
     {
         // t_list *tmp;`
         // t_command *cmd = ((t_command *)g_minishell.cmd_tail->content);
-        ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->outFiles, ft_lstnew(str));
+        ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->redFiles, ft_lstnew(ft_red_file(str, 1)));
 
         g_minishell.read_next = NULL;
 
     } else if (ft_strequ(g_minishell.read_next, APP_OUTPUT_RED)) {
-        ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->aoutFiles, ft_lstnew(str));
+        ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->redFiles, ft_lstnew(ft_red_file(str, 2)));
         g_minishell.read_next = NULL;
     } else {
         if (ft_strequ(app, APP_OUTPUT_RED)) {

@@ -201,7 +201,7 @@ void    execute_commands()
         }
         if ((ret = is_command(argv[0])))
         {
-            // open_redirect_files(cmd);
+            open_redirect_files(cmd);
             // close(cmd->pipe);
             int in;
             int out;
