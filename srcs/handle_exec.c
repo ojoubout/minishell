@@ -191,8 +191,12 @@ void    execute_commands()
 	{
         cmd = (t_command *)lst->content;
         if (!(cmd = (t_command *)lst->content) || !cmd->argv)
-            break;
+        {
+            lst = lst->next;
+            continue;
+        }
         argv = ft_lst_to_array(cmd->argv);
+        // ft_fprintf(2, "CMD: %s %s\n", argv[0], argv[1]);
         if (cmd->inRed == 0)
         {
             while (n--)

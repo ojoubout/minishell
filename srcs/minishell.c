@@ -139,9 +139,11 @@ int    ft_precess_cmd(char *str)
     if (((ft_strncmp(str, OUTPUT_RED, 1) == 0 || ft_strncmp(str, APP_OUTPUT_RED, 2) == 0 
         || ft_strncmp(str, INPUT_RED, 1) == 0) && (g_minishell.read_next != NULL && !ft_strequ(g_minishell.read_next, PIPE))) ||
         ((ft_strncmp(str, PIPE, 1) == 0 || ft_strncmp(str, SEMI_COLUMN, 1) == 0) && 
-        (g_minishell.read_next != NULL || cmd->argv == NULL)))
+        ((g_minishell.read_next != NULL || cmd->argv == NULL) && !g_minishell.env_var)))
         return ft_syntax_error(str);
     // else if (*str !=)
+    g_minishell.env_var = 0;
+
     if (ft_strncmp(str, PIPE, 1) == 0)
         ft_handle_pipe(str);
     else if (ft_strncmp(str, SEMI_COLUMN, 1) == 0)
@@ -165,6 +167,8 @@ void    init()
     g_minishell.forked = 0;
     g_minishell.read_next = NULL;
     g_minishell.pos = 0;
+    g_minishell.sep_cmd = ft_lstnew(g_minishell.cmd_head);
+    // g_minishell.cmd_index = 0;
 }
 
 int     get_command_line(char **line) 
@@ -260,8 +264,10 @@ int     main(int argc, char **argv, char **env)
             // g_minishell.command_line = get_command_line();
             get_command_line(&g_minishell.command_line);
         }
+
         old_cmd = g_minishell.command_line;
-        g_minishell.command_line = ft_convert_env(old_cmd);
+        g_minishell.command_line = ft_convert_env(old_cmd, 0);
+        ft_fprintf(2, "|%s|\n", g_minishell.command_line);
         // get_next_line(0, &g_minishell.command_line);
         // if (r == 0 && !g_minishell.command_line)
             // ft_exit();

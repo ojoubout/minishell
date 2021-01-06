@@ -45,16 +45,27 @@ typedef struct s_env{
 
 typedef struct  s_minishell
 { 
-	int         return_code;
-	int         stat;
+	int         	return_code;
+	int         	stat;
+	char        	*command_line;
+	int         	pos;
+	int         	pipe[2];
+	t_list      	*cmd_head;
+	t_list      	*cmd_tail;
+	t_sep_command	*sep_cmd;
+	// int			cmd_index;
+	char        	*read_next;
+	int         	forked;
+	int				env_var;
+}               t_minishell;
+
+typedef struct  s_sep_command
+{
 	char        *command_line;
-	int         pos;
-	int         pipe[2];
 	t_list      *cmd_head;
 	t_list      *cmd_tail;
-	char        *read_next;
-	int         forked;
-}               t_minishell;
+
+}				t_sep_command;
 
 typedef struct  s_command
 {
@@ -110,7 +121,7 @@ char		*ft_quotes_convert(char *str);
 t_list		*ft_array_to_lst(char **array);
 char		*ft_strappend(char *str, char c);
 int 		get_next_word(const char *str, char *d);
-char    	*ft_convert_env(char *str);
+char    	*ft_convert_env(char *str, int i);
 char 		*get_from_env(char *s);
 t_list 		*lstchr(t_list *head, char *s);
 void 		ft_echo(char **argv);
