@@ -234,7 +234,10 @@ void    execute_commands()
                 execute_command(lst->content);
             }
             else if (ret < 0)
+            {
                 ft_fprintf(2, "minishell: fork: %s\n", strerror(errno));
+                exit(128);
+            }
             else
             {
                 if (cmd->inRed != 0)

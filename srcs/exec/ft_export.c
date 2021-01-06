@@ -91,7 +91,6 @@ void show_all_export(char *start_with)
     t_list *curr;
 
     curr = g_env.env_head;
-	start_with = NULL;
     while (curr)
     {
 		// ft_fprintf(2, "%s\n", curr->content);
