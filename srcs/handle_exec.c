@@ -68,8 +68,6 @@ int is_command(char *s)
     return (0);
 }
 
-
-
 int treat_cmd(char **argv, int cmd_id)
 {
     if (cmd_id == 1)
@@ -79,7 +77,7 @@ int treat_cmd(char **argv, int cmd_id)
     else if (cmd_id == 3)
         ft_pwd(argv);
     else if (cmd_id == 4)
-        ft_export(argv);
+        return(ft_export(argv));
     else if (cmd_id == 5)
         ft_unset(argv);
     else if (cmd_id == 6)
@@ -114,15 +112,15 @@ int ft_try_path(char **argv)
 		{
             execve(s, argv, env_args);
             free(s);
-            return (1);
+            return (0);
         }
         free(s);
         i++;
     }
-    return (0);
+    return (1);
 }
 
-void ft_redirect(char **argv)
+int ft_redirect(char **argv)
 {
     char **env_args = ft_lst_to_array(g_env.env_head);
     struct stat sb;
@@ -130,14 +128,15 @@ void ft_redirect(char **argv)
     if (stat(argv[0], &sb) == 0 && sb.st_mode & S_IXUSR)
     {
         execve(argv[0], argv, env_args);
-        return ;
+        return (0);
     }
     else
     {
-        if (ft_try_path(argv))
-            return ;
+        if (!ft_try_path(argv))
+            return (0);
     }
     ft_fprintf(2, "minishell: %s: command not found\n", argv[0]);
+    return (1);
 }
 
 static int    ft_wait()
@@ -234,6 +233,8 @@ void    execute_commands()
                 // print_command(cmd);
                 execute_command(lst->content);
             }
+            else if (ret < 0)
+                ft_fprintf(2, "minishell: fork: %s\n", strerror(errno));
             else
             {
                 if (cmd->inRed != 0)
