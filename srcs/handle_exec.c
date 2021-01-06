@@ -197,12 +197,12 @@ void    execute_commands()
         }
         argv = ft_lst_to_array(cmd->argv);
         // ft_fprintf(2, "CMD: %s %s\n", argv[0], argv[1]);
-        if (cmd->inRed == 0)
-        {
-            while (n--)
-                ft_wait();
-            n = 0;
-        }
+        // if (cmd->inRed == 0)
+        // {
+        //     while (n--)
+        //         ft_wait();
+        //     n = 0;
+        // }
         if ((ret = is_command(argv[0])))
         {
             open_redirect_files(cmd);

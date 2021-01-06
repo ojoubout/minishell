@@ -167,8 +167,6 @@ void    init()
     g_minishell.forked = 0;
     g_minishell.read_next = NULL;
     g_minishell.pos = 0;
-    g_minishell.sep_cmd = ft_lstnew(g_minishell.cmd_head);
-    // g_minishell.cmd_index = 0;
 }
 
 int     get_command_line(char **line) 
@@ -235,6 +233,46 @@ char *get_from_env(char *s)
     return (NULL);
 }
 
+void    ft_parse()
+{
+    int len;
+
+    while (g_minishell.stat && g_minishell.command_line[g_minishell.pos] &&
+    (g_minishell.pos += get_next_word(g_minishell.command_line + g_minishell.pos, SEP)) != -1)
+    {
+        if (g_minishell.command_line[g_minishell.pos] == 0)
+            break;
+        // if (ft_on_char(g_minishell.command_line + pos, 0, SEP))
+            // pos++;
+        len = ft_word_length(g_minishell.command_line + g_minishell.pos, SEP);
+        // ft_putnbr_fd(len, 1);
+        // ft_putendl_fd(g_minishell.command_line + g_minishell.pos, 1);
+        ft_precess_cmd(g_minishell.command_line + g_minishell.pos);
+        g_minishell.pos += len;
+        // g_minishell.pos++;
+    }
+
+}
+
+void    ft_execute(int f)
+{
+    if (g_minishell.stat && g_minishell.read_next != NULL && !ft_strequ(g_minishell.read_next, PIPE))
+        ft_syntax_error("\n");
+
+    // print_commands();
+    if (g_minishell.stat && g_minishell.read_next == NULL)
+        execute_commands();
+    if (!ft_strequ(g_minishell.read_next, PIPE))
+        ft_lstclear(&g_minishell.cmd_head, ft_free_command);
+    if (f)
+    {
+        free(g_minishell.command_line);
+        // free(old_cmd);
+        g_minishell.command_line = NULL;
+    }
+
+}
+
 int     main(int argc, char **argv, char **env)
 {
     char    *old_cmd;
@@ -267,38 +305,9 @@ int     main(int argc, char **argv, char **env)
 
         old_cmd = g_minishell.command_line;
         g_minishell.command_line = ft_convert_env(old_cmd, 0);
-        ft_fprintf(2, "|%s|\n", g_minishell.command_line);
-        // get_next_line(0, &g_minishell.command_line);
-        // if (r == 0 && !g_minishell.command_line)
-            // ft_exit();
-        // else
-            // write(1, "HH", 2);
-        int len = ft_strlen(g_minishell.command_line);
-        while (g_minishell.stat && g_minishell.command_line[g_minishell.pos] &&
-        (g_minishell.pos += get_next_word(g_minishell.command_line + g_minishell.pos, SEP)) != -1)
-        {
-            if (g_minishell.command_line[g_minishell.pos] == 0)
-                break;
-            // if (ft_on_char(g_minishell.command_line + pos, 0, SEP))
-                // pos++;
-            len = ft_word_length(g_minishell.command_line + g_minishell.pos, SEP);
-            // ft_putnbr_fd(len, 1);
-            // ft_putendl_fd(g_minishell.command_line + g_minishell.pos, 1);
-            ft_precess_cmd(g_minishell.command_line + g_minishell.pos);
-            g_minishell.pos += len;
-            // g_minishell.pos++;
-        }
-        if (g_minishell.stat && g_minishell.read_next != NULL && !ft_strequ(g_minishell.read_next, PIPE))
-            ft_syntax_error("\n");
-
-        // print_commands();
-        if (g_minishell.stat && g_minishell.read_next == NULL)
-            execute_commands();
-        if (!ft_strequ(g_minishell.read_next, PIPE))
-            ft_lstclear(&g_minishell.cmd_head, ft_free_command);
-        free(g_minishell.command_line);
         free(old_cmd);
-        g_minishell.command_line = NULL;
+        ft_parse();
+        ft_execute(1);
     }
     return (g_minishell.return_code);
 }

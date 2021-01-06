@@ -98,22 +98,19 @@ static t_red_file   *ft_red_file(char *file, char type)
 
 int    ft_handle_semi_column(char *str)
 {
-    // t_command   *cmd;
-    t_sep_command   *cmd;
-    // cmd = g_minishell.cmd_tail->content;
+    t_command   *cmd;
+    cmd = g_minishell.cmd_tail->content;
 
-    cmd = malloc(sizeof(t_sep_command));
-    cmd.cmd_head = ft_lstnew(ft_new_command(0, 1, -1));
-    cmd.cmd_tail = cmd.cmd_head;
-    // g_minishell.sep_cmd = 
-    ft_lstadd_back(&g_minishell.sep_cmd, ft_lstnew(cmd));
+    ft_execute(0);
+    g_minishell.cmd_head = ft_lstnew(ft_new_command(0, 1, -1));
+    g_minishell.cmd_tail = g_minishell.cmd_head;
+    // ft_lstadd_back(&g_minishell.cmd_head, g_minishell.cmd_tail);
 
     str = g_minishell.command_line;
     g_minishell.command_line = ft_convert_env(g_minishell.command_line, g_minishell.pos + 1);
-    ft_fprintf(2, "|%s|\n", g_minishell.command_line);
+    // ft_fprintf(2, "|%s|\n", g_minishell.command_line);
 
     free(str);
-    // g_minishell.env_var = 1;
     g_minishell.read_next = NULL;
     g_minishell.pos++;
     return (0);

@@ -45,27 +45,17 @@ typedef struct s_env{
 
 typedef struct  s_minishell
 { 
-	int         	return_code;
-	int         	stat;
-	char        	*command_line;
-	int         	pos;
-	int         	pipe[2];
-	t_list      	*cmd_head;
-	t_list      	*cmd_tail;
-	t_sep_command	*sep_cmd;
-	// int			cmd_index;
-	char        	*read_next;
-	int         	forked;
-	int				env_var;
-}               t_minishell;
-
-typedef struct  s_sep_command
-{
+	int         return_code;
+	int         stat;
 	char        *command_line;
+	int         pos;
+	int         pipe[2];
 	t_list      *cmd_head;
 	t_list      *cmd_tail;
-
-}				t_sep_command;
+	char        *read_next;
+	int         forked;
+	int			env_var;
+}               t_minishell;
 
 typedef struct  s_command
 {
@@ -141,6 +131,7 @@ int			ft_custom_atoi(const char *str, int i, int *error);
 char    	*ft_get_var(char *name);
 void 		ft_free(void *ptr);
 int     	*ft_new_fd(int in, int out, int pid);
+void    	ft_execute(int f);
 
 // char	**ft_free(char **ptr, size_t size);
 int			ft_strequ(char *s1, char *s2);
