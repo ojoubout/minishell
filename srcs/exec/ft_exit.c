@@ -21,7 +21,7 @@ int ft_isnumber(char *s)
         i++;
     while (s[i])
     {
-        if (!ft_isdigit(s[i]))
+        if (!ft_isdigit(s[i]) && s[i] != ' ')
             return (0);
         i++;
     }
@@ -52,7 +52,7 @@ int  ft_exit(char **argv)
         exit(255);
     }
     ret = ft_custom_atoi(argv[1], 0, &error);
-    ft_fprintf(2, "exit, %d, %d\n", ret, error);
+    // ft_fprintf(2, "exit, %d, %d\n", ret, error);
     // if ((ret == -1 && argv[1][0] != '-') || ret == -2)
     //     exit(255);
     // if (ret > 255)

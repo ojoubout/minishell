@@ -277,15 +277,31 @@ int     main(int argc, char **argv, char **env)
 {
     char    *old_cmd;
 
+    // for (int i = 0; env[i]; i++)
+    //     ft_fprintf(1, "%s\n", env[i]);
     g_env.env_head = ft_array_to_lst(env);
     g_env.path = ft_split(get_path(), ':');
+    add_element("PWD", getcwd(NULL, 0));
     argc = 0;
-    argv = NULL;
+    // argv = NULL;
     signal(SIGINT, handle_sigint);
     signal(SIGQUIT, handle_sigint);
     g_minishell.return_code = 0;
     while (1)
     {
+        if (ft_strequ(argv[1], "-c"))
+        {
+            init();
+            g_minishell.command_line = ft_strdup(argv[2]);
+            // ft_fprintf(2, "%s %s\n", argv[1], g_minishell.command_line);
+            old_cmd = g_minishell.command_line;
+            g_minishell.command_line = ft_convert_env(old_cmd, 0);
+            free(old_cmd);
+            ft_parse();
+            ft_execute(1);
+            exit(g_minishell.return_code);
+        }
+        
         if (ft_strequ(g_minishell.read_next, PIPE)) {
 
             show_prompt(PIPE);
