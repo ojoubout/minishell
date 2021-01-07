@@ -198,6 +198,11 @@ int     get_command_line(char **line)
         *line = ft_strjoin(*line, b);
         free(tmp);
     }
+    if (r == -1)
+    {
+        ft_fprintf(2, "minishell: %d %s", errno, strerror(errno));
+        exit(1);
+    }
     return (r);
 }
 

@@ -19,18 +19,16 @@ int ft_syntax_error(char *token)
     else {
         if (*token == '\n')
             token = "newline";
+        else if (ft_strncmp(token, APP_OUTPUT_RED, 2) == 0)
+            token = ">>";
         else
             token[1] = 0;
         ft_fprintf(2, "minishell: syntax error near unexpected token `%s'\n",
                     token);
     }
-    // ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
-    // ft_putstr_fd(token, 2);
-    // ft_putendl_fd("'", 2);
     g_minishell.return_code = 258;
     g_minishell.stat = 0;
     g_minishell.read_next = NULL;
-    // ft_lstclear(&g_minishell.cmd_head, ft_free_command);
 
     return (1);
 }
@@ -112,6 +110,7 @@ int    ft_handle_semi_column(char *str)
 
     free(str);
     g_minishell.read_next = NULL;
+    g_minishell.stat = 1;
     g_minishell.pos++;
     return (0);
 }

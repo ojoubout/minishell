@@ -189,7 +189,8 @@ void    execute_commands()
     while (lst != NULL)
 	{
         cmd = (t_command *)lst->content;
-        if (!(cmd = (t_command *)lst->content) || !cmd->argv)
+        open_redirect_files(cmd);
+        if (!(cmd = (t_command *)lst->content) || !cmd->argv || cmd->inRed == -1 || cmd->outRed == -1)
         {
             lst = lst->next;
             continue;
@@ -204,7 +205,6 @@ void    execute_commands()
         // }
         if ((ret = is_command(argv[0])))
         {
-            open_redirect_files(cmd);
             // close(cmd->pipe);
             int in;
             int out;
