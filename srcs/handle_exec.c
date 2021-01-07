@@ -12,12 +12,11 @@
 
 #include "../includes/minishell.h"
 
-
-char    **ft_lst_to_array(t_list    *lst)
+char		**ft_lst_to_array(t_list *lst)
 {
-    char        **argv;
-    int         len;
-    int         i;
+	char	**argv;
+	int		len;
+	int		i;
 
     len = ft_lstsize(lst);
     argv = malloc(sizeof(char *) * (len + 1));
@@ -32,13 +31,11 @@ char    **ft_lst_to_array(t_list    *lst)
     return (argv);
 }
 
-t_list *ft_array_to_lst(char **array)
+t_list		*ft_array_to_lst(char **array)
 {
-    t_list *head;
-    int i;
+	t_list	*head;
+	int		i;
 
-    // if (!(head = malloc(sizeof(t_list *))))
-    //     return (NULL);
     i = 0;
     head = NULL;
     while (array[i])
@@ -49,7 +46,7 @@ t_list *ft_array_to_lst(char **array)
     return (head);
 }
 
-int is_command(char *s)
+int			is_command(char *s)
 {
     if (ft_strequ(s, "echo"))
         return (1);
@@ -68,59 +65,56 @@ int is_command(char *s)
     return (0);
 }
 
-int treat_cmd(char **argv, int cmd_id)
+int			treat_cmd(char **argv, int cmd_id)
 {
     if (cmd_id == 1)
         ft_echo(argv);
     else if (cmd_id == 2)
-        return(ft_cd(argv));
+		return (ft_cd(argv));
     else if (cmd_id == 3)
         ft_pwd(argv);
     else if (cmd_id == 4)
-        ft_export(argv);
+		return (ft_export(argv));
     else if (cmd_id == 5)
-        ft_unset(argv);
+		return (ft_unset(argv));
     else if (cmd_id == 6)
         ft_env(argv);
     else if (cmd_id == 7)
-        return(ft_exit(argv));
+		return (ft_exit(argv));
     return (0);
 }
 
-int ft_try_path(char **argv)
+int			ft_try_path(char **argv)
 {
-    int i;
+	int			i;
     struct stat sb;
-    char **env_args = ft_lst_to_array(g_env.env_head);
-    char *s = NULL;
-    char **pfree;
-    char     *tmp;
+	char		**env_args;
+	char		*s;
+	char		*tmp;
 
     i = 0;
-    pfree = g_env.path;
-    g_env.path = ft_split(get_path(), ':');
-    free(pfree);
-    // printf("%s", argv[0]);
+	env_args = ft_lst_to_array(g_env.env_head);
+	if (!(g_env.path = ft_split(get_path(), ':')))
+		return (1);
     while (g_env.path[i])
     {
         s = ft_strjoin(g_env.path[i], "/");
         tmp = s;
         s = ft_strjoin(s, argv[0]);
         free(tmp);
-        // printf("%s\n", s);
         if (stat(s, &sb) == 0 && sb.st_mode & S_IXUSR)
 		{
             execve(s, argv, env_args);
             free(s);
-            return (1);
+			return (0);
         }
         free(s);
         i++;
     }
-    return (0);
+	return (1);
 }
 
-void ft_redirect(char **argv)
+int ft_redirect(char **argv)
 {
     char **env_args = ft_lst_to_array(g_env.env_head);
     struct stat sb;
@@ -128,14 +122,18 @@ void ft_redirect(char **argv)
     if (stat(argv[0], &sb) == 0 && sb.st_mode & S_IXUSR)
     {
         execve(argv[0], argv, env_args);
-        return ;
+		return (0);
     }
     else
     {
-        if (ft_try_path(argv))
-            return ;
+		if (!ft_try_path(argv))
+			return (0);
     }
+	if (!get_path() || *get_path() == 0)
+		ft_fprintf(2, "minishell: %s: No such file or directory\n", argv[0]);
+	else
     ft_fprintf(2, "minishell: %s: command not found\n", argv[0]);
+	return (1);
 }
 
 static int    ft_wait()

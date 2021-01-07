@@ -237,11 +237,7 @@ char *get_from_env(char *s)
 void    ft_parse()
 {
     int len;
-    // char    *old_cmd;
 
-    // old_cmd = g_minishell.command_line;
-    // g_minishell.command_line = ft_convert_env(old_cmd);
-    // free(old_cmd);
     while (g_minishell.stat && g_minishell.command_line[g_minishell.pos] &&
     (g_minishell.pos += get_next_word(g_minishell.command_line + g_minishell.pos, SEP)) != -1)
     {
@@ -263,7 +259,7 @@ void    ft_execute(int f)
 {
     if (g_minishell.stat && g_minishell.read_next != NULL)
         ft_syntax_error("\n");
-    // if (ft_strequ(g_minishell.read_next, PIPE) )
+
     // print_commands();
     if (g_minishell.stat && g_minishell.read_next == NULL)
         execute_commands();
@@ -281,11 +277,15 @@ void    ft_execute(int f)
 int     main(int argc, char **argv, char **env)
 {
     char    *old_cmd;
+
     // for (int i = 0; env[i]; i++)
     //     ft_fprintf(1, "%s\n", env[i]);
     g_env.env_head = ft_array_to_lst(env);
     g_env.path = ft_split(get_path(), ':');
-    add_element("PWD", getcwd(NULL, 0));
+    old_cmd = getcwd(NULL, 0);
+    add_element("PWD", old_cmd);
+    free(old_cmd);
+    add_element("SHLVL", "1");
     argc = 0;
     // argv = NULL;
     signal(SIGINT, handle_sigint);
