@@ -54,7 +54,6 @@ typedef struct  s_minishell
 	t_list      *cmd_tail;
 	char        *read_next;
 	int         forked;
-	int			env_var;
 }               t_minishell;
 
 typedef struct  s_command
@@ -111,7 +110,7 @@ char		*ft_quotes_convert(char *str);
 t_list		*ft_array_to_lst(char **array);
 char		*ft_strappend(char *str, char c);
 int 		get_next_word(const char *str, char *d);
-char    	*ft_convert_env(char *str, int i);
+char    	*ft_convert_env(char *str);
 char 		*get_from_env(char *s);
 t_list 		*lstchr(t_list *head, char *s);
 void 		ft_echo(char **argv);
@@ -131,7 +130,7 @@ int			ft_custom_atoi(const char *str, int i, int *error);
 char    	*ft_get_var(char *name);
 void 		ft_free(void *ptr);
 int     	*ft_new_fd(int in, int out, int pid);
-void    	ft_execute(int f);
+int 		ft_endwith_pipe();
 
 // char	**ft_free(char **ptr, size_t size);
 int			ft_strequ(char *s1, char *s2);

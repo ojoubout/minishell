@@ -77,7 +77,7 @@ int treat_cmd(char **argv, int cmd_id)
     else if (cmd_id == 3)
         ft_pwd(argv);
     else if (cmd_id == 4)
-        return(ft_export(argv));
+        ft_export(argv);
     else if (cmd_id == 5)
         ft_unset(argv);
     else if (cmd_id == 6)
@@ -112,15 +112,15 @@ int ft_try_path(char **argv)
 		{
             execve(s, argv, env_args);
             free(s);
-            return (0);
+            return (1);
         }
         free(s);
         i++;
     }
-    return (1);
+    return (0);
 }
 
-int ft_redirect(char **argv)
+void ft_redirect(char **argv)
 {
     char **env_args = ft_lst_to_array(g_env.env_head);
     struct stat sb;
@@ -128,15 +128,14 @@ int ft_redirect(char **argv)
     if (stat(argv[0], &sb) == 0 && sb.st_mode & S_IXUSR)
     {
         execve(argv[0], argv, env_args);
-        return (0);
+        return ;
     }
     else
     {
-        if (!ft_try_path(argv))
-            return (0);
+        if (ft_try_path(argv))
+            return ;
     }
     ft_fprintf(2, "minishell: %s: command not found\n", argv[0]);
-    return (1);
 }
 
 static int    ft_wait()
@@ -177,6 +176,63 @@ void    execute_command(t_command *cmd)
     exit(127);
 }
 
+void    ft_lstadd(t_list **lst, t_list *new)
+{
+    if (*lst == NULL || new == NULL)
+        return ;
+    new->next = (*lst)->next;
+    (*lst)->next = new;
+}
+
+void    ft_lstremove(t_list **lst, t_list *del_lst, void (*del)(void *))
+{
+    t_list  *tmp;
+
+    if (!(*lst) || !del_lst)
+        return ;
+    if (*lst == del_lst)
+    {
+        *lst = (*lst)->next;
+        return ;
+    }
+    tmp = *lst;
+    while (tmp->next)
+    {
+        if (tmp->next == del_lst)
+        {
+            tmp->next = tmp->next->next;
+            if (del)
+                ft_lstdelone(del_lst, del);
+        }
+        tmp = tmp->next;
+    }
+}
+
+void    ft_argv_convert_env(t_list **argv)
+{
+    t_list *tmp;
+
+    if (!(*argv))
+        return ;
+    tmp = *argv;
+    while (tmp)
+    {
+        tmp->content = ft_convert_env(tmp->content);
+        if (*((char *)tmp->content) == 0)
+        {
+            if (*argv == tmp)
+            {
+                ft_lstremove(&tmp, tmp, ft_free);
+                *argv = tmp;
+            }
+            else
+                ft_lstremove(&tmp, tmp, ft_free);
+        }
+        else
+            tmp = tmp->next;
+    }
+}
+
 void    execute_commands()
 {
     t_list  *lst;
@@ -195,14 +251,14 @@ void    execute_commands()
             lst = lst->next;
             continue;
         }
+        if (cmd->inRed == 0)
+        {
+            while (n--)
+                ft_wait();
+            n = 0;
+        }
+        ft_argv_convert_env(&cmd->argv);
         argv = ft_lst_to_array(cmd->argv);
-        // ft_fprintf(2, "CMD: %s %s\n", argv[0], argv[1]);
-        // if (cmd->inRed == 0)
-        // {
-        //     while (n--)
-        //         ft_wait();
-        //     n = 0;
-        // }
         if ((ret = is_command(argv[0])))
         {
             // close(cmd->pipe);

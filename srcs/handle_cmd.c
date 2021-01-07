@@ -98,19 +98,11 @@ int    ft_handle_semi_column(char *str)
 {
     t_command   *cmd;
     cmd = g_minishell.cmd_tail->content;
+    g_minishell.cmd_tail = ft_lstnew(ft_new_command(0, 1, -1));
+    ft_lstadd_back(&g_minishell.cmd_head, g_minishell.cmd_tail);
 
-    ft_execute(0);
-    g_minishell.cmd_head = ft_lstnew(ft_new_command(0, 1, -1));
-    g_minishell.cmd_tail = g_minishell.cmd_head;
-    // ft_lstadd_back(&g_minishell.cmd_head, g_minishell.cmd_tail);
-
-    str = g_minishell.command_line;
-    g_minishell.command_line = ft_convert_env(g_minishell.command_line, g_minishell.pos + 1);
-    // ft_fprintf(2, "|%s|\n", g_minishell.command_line);
-
-    free(str);
+    str = NULL;
     g_minishell.read_next = NULL;
-    g_minishell.stat = 1;
     g_minishell.pos++;
     return (0);
 }
