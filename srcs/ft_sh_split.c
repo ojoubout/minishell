@@ -108,6 +108,7 @@ char	*ft_quotes_convert(char *str)
 		}
         i++;
 	}
+	free(str);
 	return (res);
 }
 

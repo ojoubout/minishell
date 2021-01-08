@@ -17,7 +17,10 @@ int     open_file(char *file, int flags, char *type)
     int         fd;
     t_command   *cmd;
     int         red;
+    char        *cfile;
 
+    cfile = ft_strdup(file);
+    file = ft_quotes_convert(ft_convert_env(cfile));
     cmd = g_minishell.cmd_head->content;
     red = ft_strequ(type, INPUT_RED) ? cmd->inRed : cmd->outRed;
     if (red > 2)

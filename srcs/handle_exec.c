@@ -191,6 +191,8 @@ void    ft_lstremove(t_list **lst, t_list *del_lst, void (*del)(void *))
     if (*lst == del_lst)
     {
         *lst = (*lst)->next;
+        if (del)
+            ft_lstdelone(del_lst, del);
         return ;
     }
     tmp = *lst;
@@ -209,6 +211,7 @@ void    ft_lstremove(t_list **lst, t_list *del_lst, void (*del)(void *))
 void    ft_argv_convert_env(t_list **argv)
 {
     t_list *tmp;
+    t_list *prev;
 
     if (!(*argv))
         return ;
@@ -224,10 +227,17 @@ void    ft_argv_convert_env(t_list **argv)
                 *argv = tmp;
             }
             else
+            {
                 ft_lstremove(&tmp, tmp, ft_free);
+                prev->next = tmp;
+            }
         }
         else
+        {
+            tmp->content = ft_quotes_convert(tmp->content);
+            prev = tmp;   
             tmp = tmp->next;
+        }
     }
 }
 
@@ -256,6 +266,11 @@ void    execute_commands()
             n = 0;
         }
         ft_argv_convert_env(&cmd->argv);
+        // t_list *tmp = cmd->argv;
+        // while (tmp)
+        // {
+        //     tmp = tmp->next;
+        // }
         argv = ft_lst_to_array(cmd->argv);
         if ((ret = is_command(argv[0])))
         {

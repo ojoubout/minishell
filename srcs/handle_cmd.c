@@ -43,8 +43,11 @@ int    ft_handle_cmd(char *str)
     str = ft_substr(str, 0, len);
     // arg = ft_convert_env(str);
     // str = arg;
-    arg = ft_quotes_convert(str);
-    free(str);
+    //     ft_fprintf(2, "B %s\n", str);
+    // arg = ft_quotes_convert(str);
+    //     ft_fprintf(2, "A %s\n", arg);
+    arg = str;
+    // free(str);
     if (ft_strequ(g_minishell.read_next, INPUT_RED))
         ft_handle_input_red(arg);
     else if (ft_strequ(g_minishell.read_next, OUTPUT_RED) || ft_strequ(g_minishell.read_next, APP_OUTPUT_RED))
