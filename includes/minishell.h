@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ojoubout <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:53:22 by ojoubout          #+#    #+#             */
-/*   Updated: 2020/12/13 12:53:28 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/11 18:03:31 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,5 +123,13 @@ void		export_empty_string(char **argv, char **sp, int i);
 void		ft_print_path(char *s);
 int 		ft_endwith_pipe();
 int			ft_strequ(char *s1, char *s2);
+void		ft_argv_convert_env(t_list **argv);
+int			treat_cmd(char **argv, int cmd_id);
+int			is_command(char *s);
+char		**ft_lst_to_array(t_list *lst);
+void		ft_lstadd(t_list **lst, t_list *new);
+void		ft_lstremove(t_list **lst, t_list *del_lst, void (*del)(void *));
+void		execute_command(t_command *cmd);
+
 
 #endif
