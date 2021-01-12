@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 17:18:26 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/12 18:46:08 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 18:54:32 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int			ft_redirect(char **argv)
 	if (S_ISLNK(sb.st_mode))
 		ret = lstat(argv[0], &sb);
 	ft_check_perm(env_args, argv, sb, ret);
-	// if (!ft_strchr(argv[0], '/'))
+	if (!ft_strchr(argv[0], '/'))
 		if (!ft_try_path(argv))
 			return (0);
 	if (ret && argv[0] && ft_strchr(argv[0], '/'))
