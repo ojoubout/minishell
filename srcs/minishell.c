@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:29:56 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/12 12:50:42 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 19:12:58 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void		ft_init(char **env)
 	char	*cwd;
 
 	g_env.env_head = ft_array_to_lst(env);
-	g_env.path = ft_split(get_path(), ':');
+	// g_env.path = ft_split(get_path(), ':');
 	cwd = getcwd(NULL, 0);
 	add_element("PWD", cwd);
 	free(cwd);

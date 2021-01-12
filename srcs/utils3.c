@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 12:10:26 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/12 18:54:34 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 19:08:17 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,12 @@ int		check_path(char *s)
 	{
 		if (stat(sp[i], &sb) != 0)
 		{
-			return (0);
 			ft_free_split(sp);
+			return (0);
 		}
 		i++;
 	}
+	ft_free_split(sp);
 	return (1);
 }
 

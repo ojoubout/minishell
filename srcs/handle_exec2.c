@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 17:18:26 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/12 18:54:32 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 19:17:18 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int			ft_try_path(char **argv)
 		{
 			execve(s, argv, env_args);
 			free(s);
+			free(env_args);
 			return (0);
 		}
 		else if (stat(s, &sb) == 0 && !(sb.st_mode & S_IXUSR))
@@ -79,9 +80,11 @@ int			ft_try_path(char **argv)
             // ft_fprintf(2, "minishell: %s: Permission denied\n", s);
 			ft_mprint("minishell: ", s, ": ", "Permission denied");
 
+			free(env_args);
             free(s);
             exit(126);
         }
+		free(env_args);
 		free(s);
 	}
 	return (1);
@@ -98,6 +101,7 @@ int			ft_redirect(char **argv)
 	if (S_ISLNK(sb.st_mode))
 		ret = lstat(argv[0], &sb);
 	ft_check_perm(env_args, argv, sb, ret);
+	free(env_args);
 	if (!ft_strchr(argv[0], '/'))
 		if (!ft_try_path(argv))
 			return (0);
