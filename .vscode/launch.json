@@ -4,25 +4,19 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "clang-10 - Build and debug active file",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/ojoubout/CursusProjects/minishell/minishell",
+            "program": "/Users/ojoubout/dev/minishell/minishell",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
-            "miDebuggerPath": "/usr/bin/gdb"
+            "MIMode": "lldb",
+            "miDebuggerPath": "/usr/bin/lldb"
         }
     ]
 }

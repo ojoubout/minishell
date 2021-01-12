@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 17:18:26 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/12 12:11:32 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 15:17:05 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,12 @@ int			ft_try_path(char **argv)
 			free(s);
 			return (0);
 		}
+		else if (stat(s, &sb) == 0 && !(sb.st_mode & S_IXUSR))
+        {
+            ft_fprintf(2, "minishell: %s: Permission denied\n", s);
+            free(s);
+            exit(126);
+        }
 		free(s);
 	}
 	return (1);
@@ -95,6 +101,8 @@ int			ft_redirect(char **argv)
 	if (ret && ft_strchr(argv[0], '/'))
 	{
 		ft_fprintf(2, "minishell: %s: %s\n", argv[0], strerror(errno));
+		// ft_mprint("minishell: ", "fork: ", strerror(errno));
+
 		return (1);
 	}
 	if (!get_path() || *get_path() == 0)

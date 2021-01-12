@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 12:10:26 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/12 12:12:03 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 15:17:30 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,12 @@ void	ft_check_perm(char **env_args, char **argv, struct stat sb, int ret)
 			ft_fprintf(2, "minishell: %s: Permission denied\n", argv[0]);
 		exit(126);
 	}
+}
+
+void	ft_mprint(char *s1, char *s2, char *s3, char *s4)
+{
+	ft_putstr_fd(s1, 2);
+	ft_putstr_fd(s2, 2);
+	ft_putstr_fd(s3, 2);
+	ft_putendl_fd(s4, 2);
 }

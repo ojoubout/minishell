@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 14:55:21 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/12 12:48:57 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 14:57:25 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,11 @@ static int	ft_is_quoted(const char *str, int i)
 			quote[0] = 0;
 		j++;
 	}
-	return (quote[0] == '\'' && str[i] != '\'');
+	if (quote[0] == '\'' && str[i] != '\'')
+		return (quote[0]);
+	else if (quote[0] == '"' && str[i] != '"')
+		return ((str[i] == '$' || str[i] == '\\') ? 0 : quote[0]);
+	return (0);
 }
 
 int			ft_on_char(const char *str, int i, char *c)
