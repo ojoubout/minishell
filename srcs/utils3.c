@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 12:10:26 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/12 15:17:30 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 15:35:41 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,15 @@ void	ft_check_perm(char **env_args, char **argv, struct stat sb, int ret)
 	|| S_ISDIR(sb.st_mode)) && ft_strchr(argv[0], '/'))
 	{
 		if (S_ISDIR(sb.st_mode))
-			ft_fprintf(2, "minishell: %s: is a directory\n", argv[0]);
+		{
+			ft_mprint("minishell: ", argv[0], ": ", "is a directory");
+			// ft_fprintf(2, "minishell: %s: is a directory\n", argv[0]);
+		}
 		else if (!(sb.st_mode & S_IXUSR) || !(sb.st_mode & S_IRUSR))
-			ft_fprintf(2, "minishell: %s: Permission denied\n", argv[0]);
+		{
+			ft_mprint("minishell: ", argv[0], ": ", "Permission denied");
+			// ft_fprintf(2, "minishell: %s: Permission denied\n", argv[0]);
+		}
 		exit(126);
 	}
 }

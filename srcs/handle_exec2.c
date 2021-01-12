@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 17:18:26 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/12 15:17:05 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 18:46:08 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,9 @@ int			ft_try_path(char **argv)
 		}
 		else if (stat(s, &sb) == 0 && !(sb.st_mode & S_IXUSR))
         {
-            ft_fprintf(2, "minishell: %s: Permission denied\n", s);
+            // ft_fprintf(2, "minishell: %s: Permission denied\n", s);
+			ft_mprint("minishell: ", s, ": ", "Permission denied");
+
             free(s);
             exit(126);
         }
@@ -96,19 +98,19 @@ int			ft_redirect(char **argv)
 	if (S_ISLNK(sb.st_mode))
 		ret = lstat(argv[0], &sb);
 	ft_check_perm(env_args, argv, sb, ret);
-	if (!ft_try_path(argv))
-		return (0);
-	if (ret && ft_strchr(argv[0], '/'))
+	// if (!ft_strchr(argv[0], '/'))
+		if (!ft_try_path(argv))
+			return (0);
+	if (ret && argv[0] && ft_strchr(argv[0], '/'))
 	{
-		ft_fprintf(2, "minishell: %s: %s\n", argv[0], strerror(errno));
-		// ft_mprint("minishell: ", "fork: ", strerror(errno));
-
+		// ft_fprintf(2, "minishell: %s: %s\n", argv[0], strerror(errno));
+		ft_mprint("minishell: ", argv[0], ": ", strerror(errno));
 		return (1);
 	}
 	if (!get_path() || *get_path() == 0)
-		ft_fprintf(2, "minishell: %s: No such file or directory\n", argv[0]);
+		ft_mprint("minishell: ", argv[0], ": ", "No such file or directory");
 	else
-		ft_fprintf(2, "minishell: %s: command not found\n", argv[0]);
+		ft_mprint("minishell: ", argv[0], ": ", "command not found");
 	return (1);
 }
 

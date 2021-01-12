@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:38:33 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/11 19:17:11 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 15:33:23 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void			show_prompt(char *type)
 	}
 	else if (ft_strequ(type, PIPE))
 	{
-		ft_fprintf(2, "pipe > ");
+		// ft_fprintf(2, "pipe > ");
+		ft_putstr_fd("pipe > ", 2);
 	}
 }
