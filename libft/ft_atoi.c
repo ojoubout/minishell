@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ojoubout <ojoubout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 17:26:19 by ojoubout          #+#    #+#             */
-/*   Updated: 2019/10/21 19:33:25 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 10:19:16 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,54 +49,7 @@ int			ft_atoi(const char *str)
 	return ((int)(num * neg));
 }
 
-
-// static int	ft_custom_return(unsigned long long num, int add, int sign, int *error)
-// {
-// 	if (sign == 1 && (num > 9223372036854775807 ||
-// 	(num == 9223372036854775807 && add > 7)))
-// 	{
-// 		*error = 1;
-// 		return (-1);
-// 	}
-// 	else if (sign == -1 && (num > 9223372036854775807 && add > 8))
-// 	{
-// 		*error = 1;
-// 		return (0);
-// 	}
-// 	return (1);
-// }
-
-// int			ft_custom_atoi(const char *str, int *error)
-// {
-// 	long long	num;
-// 	int			i;
-// 	int			neg;
-
-// 	num = 0;
-// 	i = 0;
-// 	neg = 1;
-// 	if (*str == '-' || *str == '+')
-// 	{
-// 		neg = -*str + 44;
-// 		i++;
-// 	}
-// 	else if (*str == ' ' || (*str > 8 && *str < 14))
-// 		return (ft_atoi((str + 1)));
-// 	while (*(str + i))
-// 	{
-// 		if (ft_custom_return((unsigned long long)num, *(str + i) - 48, neg, error) != 1)
-// 			return (ft_custom_return(num, *(str + i) - 48, neg, error));
-// 		if (*(str + i) < 58 && *(str + i) > 47)
-// 			num = num * 10 + (*(str + i) - 48);
-// 		else
-// 			break ;
-// 		i++;
-// 	}
-// 	return ((int)(num * neg));
-// }
-
-
-int		ft_custom_atoi(const char *str, int i, int *error)
+int			ft_custom_atoi(const char *str, int i, int *error)
 {
 	int					sign;
 	unsigned long long	result;

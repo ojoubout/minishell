@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 15:12:12 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/11 18:42:08 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 10:16:18 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int					ft_handle_pipe(char *str)
 		ft_putendl_fd("pipe error", 2);
 		exit(1);
 	}
-	cmd->outRed = p[1];
+	cmd->out_red = p[1];
 	cmd->pipe[0] = p[0];
 	g_minishell.cmd_tail = ft_lstnew(ft_new_command(p[0], 1, p[1]));
 	ft_lstadd_back(&g_minishell.cmd_head, g_minishell.cmd_tail);
@@ -60,7 +60,7 @@ int					ft_handle_input_red(char *str)
 {
 	if (ft_strequ(g_minishell.read_next, INPUT_RED))
 	{
-		ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->redFiles,
+		ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->red_files,
 		ft_lstnew(ft_red_file(str, 0)));
 		g_minishell.read_next = NULL;
 	}
@@ -76,13 +76,13 @@ int					ft_handle_output_red(char *str, char *app)
 {
 	if (ft_strequ(g_minishell.read_next, OUTPUT_RED))
 	{
-		ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->redFiles,
+		ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->red_files,
 		ft_lstnew(ft_red_file(str, 1)));
 		g_minishell.read_next = NULL;
 	}
 	else if (ft_strequ(g_minishell.read_next, APP_OUTPUT_RED))
 	{
-		ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->redFiles,
+		ft_lstadd_back(&((t_command *)g_minishell.cmd_tail->content)->red_files,
 		ft_lstnew(ft_red_file(str, 2)));
 		g_minishell.read_next = NULL;
 	}

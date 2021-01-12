@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 17:14:39 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/11 18:10:29 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 10:16:30 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,15 @@ static void	ft_builtin_cmd(t_command *cmd, char **argv, int ret)
 
 	in = dup(0);
 	out = dup(1);
-	dup2(cmd->inRed, 0);
-	dup2(cmd->outRed, 1);
+	dup2(cmd->in_red, 0);
+	dup2(cmd->out_red, 1);
 	g_minishell.return_code = treat_cmd(argv, ret);
 	dup2(in, 0);
 	dup2(out, 1);
-	if (cmd->inRed != 0)
-		close(cmd->inRed);
-	if (cmd->outRed != 1)
-		close(cmd->outRed);
+	if (cmd->in_red != 0)
+		close(cmd->in_red);
+	if (cmd->out_red != 1)
+		close(cmd->out_red);
 	free(argv);
 }
 
@@ -61,10 +61,10 @@ static void	ft_system_cmd(t_command *cmd, int ret, int *n)
 	}
 	else
 	{
-		if (cmd->inRed != 0)
-			close(cmd->inRed);
-		if (cmd->outRed != 1)
-			close(cmd->outRed);
+		if (cmd->in_red != 0)
+			close(cmd->in_red);
+		if (cmd->out_red != 1)
+			close(cmd->out_red);
 		g_minishell.forked = 1;
 		(*n)++;
 	}
@@ -73,9 +73,9 @@ static void	ft_system_cmd(t_command *cmd, int ret, int *n)
 static int	ft_init_exec(t_command *cmd, int *n, char ***argv)
 {
 	open_redirect_files(cmd);
-	if (!cmd || !cmd->argv || cmd->inRed == -1 || cmd->outRed == -1)
+	if (!cmd || !cmd->argv || cmd->in_red == -1 || cmd->out_red == -1)
 		return (1);
-	if (cmd->inRed == 0)
+	if (cmd->in_red == 0)
 	{
 		while ((*n)--)
 			ft_wait();

@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 17:18:26 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/11 18:16:02 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 10:16:30 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ void		execute_command(t_command *cmd)
 
 	argv = ft_lst_to_array(cmd->argv);
 	open_redirect_files(cmd);
-	dup2(cmd->inRed, 0);
-	dup2(cmd->outRed, 1);
+	dup2(cmd->in_red, 0);
+	dup2(cmd->out_red, 1);
 	ft_redirect(argv);
 	exit(127);
 }

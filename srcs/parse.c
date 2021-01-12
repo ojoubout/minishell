@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:43:20 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/11 18:44:35 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 10:16:01 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int			ft_precess_cmd(char *str)
 	!ft_strequ(g_minishell.read_next, PIPE))) ||
 	((ft_strncmp(str, PIPE, 1) == 0 || ft_strncmp(str, SEMI_COLUMN, 1) == 0) &&
 	(g_minishell.read_next != NULL ||
-	(cmd->argv == NULL && cmd->redFiles == NULL))))
+	(cmd->argv == NULL && cmd->red_files == NULL))))
 		return (ft_syntax_error(str));
 	if (ft_strncmp(str, PIPE, 1) == 0)
 		ft_handle_pipe(str);

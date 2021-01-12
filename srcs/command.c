@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:48:00 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/11 18:48:06 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 10:16:30 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ t_command	*ft_new_command(int in, int out, int pipe)
 
 	cmd = malloc(sizeof(t_command));
 	cmd->argv = NULL;
-	cmd->inRed = in;
-	cmd->outRed = out;
-	cmd->redFiles = NULL;
+	cmd->in_red = in;
+	cmd->out_red = out;
+	cmd->red_files = NULL;
 	cmd->pipe[0] = -1;
 	cmd->pipe[1] = pipe;
 	return (cmd);
