@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 17:18:26 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/12 10:16:30 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 12:11:32 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,21 +79,23 @@ int			ft_try_path(char **argv)
 	return (1);
 }
 
-static int	ft_redirect(char **argv)
+int			ft_redirect(char **argv)
 {
 	char		**env_args;
-	struct stat	sb;
+	struct stat sb;
+	int			ret;
 
 	env_args = ft_lst_to_array(g_env.env_head);
-	if (stat(argv[0], &sb) == 0 && sb.st_mode & S_IXUSR)
-	{
-		execve(argv[0], argv, env_args);
+	ret = stat(argv[0], &sb);
+	if (S_ISLNK(sb.st_mode))
+		ret = lstat(argv[0], &sb);
+	ft_check_perm(env_args, argv, sb, ret);
+	if (!ft_try_path(argv))
 		return (0);
-	}
-	else
+	if (ret && ft_strchr(argv[0], '/'))
 	{
-		if (!ft_try_path(argv))
-			return (0);
+		ft_fprintf(2, "minishell: %s: %s\n", argv[0], strerror(errno));
+		return (1);
 	}
 	if (!get_path() || *get_path() == 0)
 		ft_fprintf(2, "minishell: %s: No such file or directory\n", argv[0]);

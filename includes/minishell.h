@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:53:22 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/12 10:18:16 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 12:13:56 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ typedef	struct	s_red_file
 	char		type;
 }				t_red_file;
 
-t_minishell		g_minishell;
-t_env			g_env;
+t_minishell g_minishell;
+t_env g_env;
 
 int				ft_handle_cmd(char *str);
 int				ft_handle_pipe(char *str);
@@ -127,9 +127,9 @@ int				treat_cmd(char **argv, int cmd_id);
 int				is_command(char *s);
 char			**ft_lst_to_array(t_list *lst);
 void			ft_lstadd(t_list **lst, t_list *new);
-t_list			*ft_lstremove(t_list **lst, t_list *del_lst,
-				void (*del)(void *));
+t_list			*ft_lstremove(t_list **lst, t_list *de_l, void (*del)(void *));
 void			execute_command(t_command *cmd);
 void			ft_parse(void);
+void			ft_check_perm(char **e_a, char **argv, struct stat sb, int ret);
 
 #endif

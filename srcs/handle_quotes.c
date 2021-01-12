@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 14:55:21 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/11 19:08:29 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 12:48:57 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char		*ft_quotes_convert(char *str)
 	res = ft_strdup("");
 	while (str[i])
 	{
-		if (quote[0] != '\'' && ft_on_char(str, i, "\\") && ++i)
+		if ((!quote[0] || (quote[0] == '"' && (str[i + 1] == '\\' || str[i + 1] == '$' || str[i + 1] == '"'))) && ft_on_char(str, i, "\\") && ++i)
 			continue;
 		if ((!quote[0] && ft_on_char(str, i, "'\"")) ||
 		(quote[0] == '\'' && str[i] == '\'') || ft_on_char(str, i, quote))

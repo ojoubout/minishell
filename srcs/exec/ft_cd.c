@@ -38,6 +38,24 @@ void	move_dir(DIR *pdir, char *to_dir)
 	}
 }
 
+int		ft_chdir(struct stat sb, char *to_dir)
+{
+	if (errno == 13 && (sb.st_mode & S_IXUSR))
+	{
+		add_element("OLDPWD", get_from_env("PWD"));
+		chdir(to_dir);
+		to_dir = getcwd(NULL, 0);
+		add_element("PWD", to_dir);
+		free(to_dir);
+		return (0);
+	}
+	else
+	{
+		ft_fprintf(2, "minishell: cd: %s: %s\n", to_dir, strerror(errno));
+		return (1);
+	}
+}
+
 int		ft_cd(char **argv)
 {
 	DIR			*pdir;
@@ -56,20 +74,7 @@ int		ft_cd(char **argv)
 	stat(argv[1], &sb);
 	if (!(pdir = opendir(to_dir)))
 	{
-		if (errno == 13 && (sb.st_mode & S_IXUSR))
-		{
-			add_element("OLDPWD", get_from_env("PWD"));
-			chdir(to_dir);
-			to_dir = getcwd(NULL, 0);
-			add_element("PWD", to_dir);
-			free(to_dir);
-			return (0);
-		}
-		else
-		{
-			ft_fprintf(2, "minishell: cd: %s: %s\n", to_dir, strerror(errno));
-			return (1);
-		}
+		return (ft_chdir(sb, to_dir));
 	}
 	move_dir(pdir, to_dir);
 	if (pdir)
