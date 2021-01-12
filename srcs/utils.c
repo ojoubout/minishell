@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 15:00:17 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/11 17:50:53 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/11 19:04:01 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,18 @@ int			ft_strequ(char *s1, char *s2)
 
 char		*ft_strappend(char *str, char c)
 {
-	char strchar[2];
+	char	strchar[2];
+	char	*tmp;
 
+	tmp = str;
 	strchar[0] = c;
 	strchar[1] = 0;
-	return (ft_strjoin(str, strchar));
+	str = ft_strjoin(str, strchar);
+	free(tmp);
+	return (str);
 }
 
-int         ft_syntax_error(char *token)
+int			ft_syntax_error(char *token)
 {
 	if (*token == '\x4')
 		ft_fprintf(2, "minishell: syntax error: unexpected end of file\n");
@@ -65,7 +69,7 @@ int         ft_syntax_error(char *token)
 	return (1);
 }
 
-int ft_endwith_pipe()
+int			ft_endwith_pipe(void)
 {
 	int i;
 

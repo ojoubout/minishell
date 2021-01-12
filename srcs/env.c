@@ -1,30 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/11 19:15:57 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/11 19:15:59 by ojoubout         ###   ########.fr       */
+/*   Created: 2021/01/11 18:45:27 by ojoubout          #+#    #+#             */
+/*   Updated: 2021/01/11 19:15:52 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
-void	ft_env(char **argv)
+char		*get_path(void)
 {
-	t_list *curr;
+	t_list	*curr;
 
 	curr = g_env.env_head;
-	argv = NULL;
 	while (curr)
 	{
-		if (ft_strchr(curr->content, '='))
-		{
-			ft_putstr_fd(curr->content, 1);
-			ft_putstr_fd("\n", 1);
-		}
+		if (!strncmp(curr->content, "PATH", 4))
+			return (curr->content + 5);
 		curr = curr->next;
 	}
+	return (NULL);
+}
+
+char		*get_from_env(char *s)
+{
+	t_list	*curr;
+
+	curr = g_env.env_head;
+	while (curr)
+	{
+		if (!strncmp(curr->content, s, ft_strlen(s)))
+			return (curr->content + ft_strlen(s) + 1);
+		curr = curr->next;
+	}
+	return (NULL);
 }

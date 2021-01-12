@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 17:18:26 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/11 18:04:56 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/11 18:16:02 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,11 @@ int			ft_try_path(char **argv)
 	char		*s;
 	char		*tmp;
 
-	i = 0;
+	i = -1;
 	env_args = ft_lst_to_array(g_env.env_head);
 	if (!(g_env.path = ft_split(get_path(), ':')))
 		return (1);
-	while (g_env.path[i])
+	while (g_env.path[++i])
 	{
 		s = ft_strjoin(g_env.path[i], "/");
 		tmp = s;
@@ -75,12 +75,11 @@ int			ft_try_path(char **argv)
 			return (0);
 		}
 		free(s);
-		i++;
 	}
 	return (1);
 }
 
-static int  ft_redirect(char **argv)
+static int	ft_redirect(char **argv)
 {
 	char		**env_args;
 	struct stat	sb;
@@ -106,7 +105,7 @@ static int  ft_redirect(char **argv)
 void		execute_command(t_command *cmd)
 {
 	char	**argv;
-	
+
 	argv = ft_lst_to_array(cmd->argv);
 	open_redirect_files(cmd);
 	dup2(cmd->inRed, 0);

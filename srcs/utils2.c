@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 17:15:07 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/11 18:03:27 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/11 19:04:28 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,18 @@ void		ft_lstadd(t_list **lst, t_list *new)
 	(*lst)->next = new;
 }
 
-void		ft_lstremove(t_list **lst, t_list *del_lst, void (*del)(void *))
+t_list		*ft_lstremove(t_list **lst, t_list *del_lst, void (*del)(void *))
 {
 	t_list	*tmp;
 
 	if (!(*lst) || !del_lst)
-		return ;
+		return (*lst);
 	if (*lst == del_lst)
 	{
 		*lst = (*lst)->next;
 		if (del)
 			ft_lstdelone(del_lst, del);
-		return ;
+		return (*lst);
 	}
 	tmp = *lst;
 	while (tmp->next)
@@ -78,4 +78,26 @@ void		ft_lstremove(t_list **lst, t_list *del_lst, void (*del)(void *))
 		}
 		tmp = tmp->next;
 	}
+	return (*lst);
+}
+
+int			ft_word_length(const char *s, char *c)
+{
+	int		i;
+	char	quote[2];
+
+	i = 0;
+	ft_bzero(quote, 2);
+	while (s[i])
+	{
+		if (!quote[0] || ft_on_char(s, i, quote))
+		{
+			if (ft_on_char(s, i, "'\""))
+				quote[0] = quote[0] ? 0 : s[i];
+			if (ft_on_char(s, i, c))
+				break ;
+		}
+		i++;
+	}
+	return (i);
 }

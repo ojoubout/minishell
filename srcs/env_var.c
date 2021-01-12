@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 14:26:55 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/11 14:53:00 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/11 18:56:55 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,7 @@ char	*ft_lastcmd_return_env(char *res, int *i)
 
 char	*ft_append(char *str, char *res, int *i)
 {
-	char	*tmp;
-
-	tmp = res;
 	res = ft_strappend(res, str[*i]);
-	free(tmp);
 	(*i)++;
 	return (res);
 }

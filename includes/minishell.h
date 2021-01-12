@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:53:22 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/11 18:03:31 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/11 18:48:51 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ int			ft_handle_pipe(char *str);
 int			ft_handle_input_red(char *str);
 int			ft_handle_output_red(char *str, char *app);
 int			ft_handle_semi_column(char *str);
-void		ft_error(char *str);
 t_command	*ft_new_command(int in, int out, int pipe);
 int			ft_syntax_error(char *token);
 int			ft_on_char(const char *str, int i, char *c);
@@ -87,7 +86,7 @@ char		**ft_sh_split(char const *s, char *c);
 void		print_commands();
 void		execute_commands();
 void		handle_sigint(int sig);
-void		show_prompt();
+void		show_prompt(char *type);
 void		open_redirect_files(t_command *cmd);
 void		ft_free_command(void *cmd);
 void		free_redirect_files();
@@ -128,8 +127,9 @@ int			treat_cmd(char **argv, int cmd_id);
 int			is_command(char *s);
 char		**ft_lst_to_array(t_list *lst);
 void		ft_lstadd(t_list **lst, t_list *new);
-void		ft_lstremove(t_list **lst, t_list *del_lst, void (*del)(void *));
+t_list		*ft_lstremove(t_list **lst, t_list *del_lst, void (*del)(void *));
 void		execute_command(t_command *cmd);
+void		ft_parse(void);
 
 
 #endif

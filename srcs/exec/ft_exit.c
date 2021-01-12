@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   ft_exit.c										  :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: hmoumani <marvin@42.fr>					+#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2021/01/01 14:40:57 by hmoumani		  #+#	#+#			 */
-/*   Updated: 2021/01/01 14:41:04 by hmoumani		 ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/11 19:16:16 by ojoubout          #+#    #+#             */
+/*   Updated: 2021/01/11 19:16:17 by ojoubout         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
@@ -67,6 +67,7 @@ int		ft_exit(char **argv)
 	char *s;
 
 	s = "numeric argument required";
+	write(2, "exit\n", 5);
 	if (!argv || !argv[1])
 	{
 		exit(g_minishell.return_code);

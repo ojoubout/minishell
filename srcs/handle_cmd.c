@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 15:12:12 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/11 15:20:38 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/11 18:42:08 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ int					ft_handle_pipe(char *str)
 
 	cmd = g_minishell.cmd_tail->content;
 	if (pipe(p) < 0)
-		ft_error("pipe error");
+	{
+		ft_putendl_fd("pipe error", 2);
+		exit(1);
+	}
 	cmd->outRed = p[1];
 	cmd->pipe[0] = p[0];
 	g_minishell.cmd_tail = ft_lstnew(ft_new_command(p[0], 1, p[1]));
