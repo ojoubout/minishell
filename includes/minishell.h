@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:53:22 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/12 17:37:37 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/13 11:02:42 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MINISHELL_H
 # include "../libft/libft.h"
 # include "../gnl/get_next_line.h"
-# include "../ft_printf/ft_printf.h"
 # include <stdio.h>
 # include <signal.h>
 # include <string.h>
@@ -124,7 +123,7 @@ void			export_empty_string(char **argv, char **sp, int i);
 void			ft_print_path(char *s);
 int				ft_endwith_pipe();
 int				ft_strequ(char *s1, char *s2);
-void			ft_argv_convert_env(t_list **argv);
+void			ft_argv_convert_env(t_list **argv, t_list *prev, char *s);
 int				treat_cmd(char **argv, int cmd_id);
 int				is_command(char *s);
 char			**ft_lst_to_array(t_list *lst);
@@ -134,5 +133,7 @@ void			execute_command(t_command *cmd);
 void			ft_parse(void);
 void			ft_check_perm(char **e_a, char **argv, struct stat sb, int ret);
 void			ft_mprint(char *s1, char *s2, char *s3, char *s4);
+int				ft_is_backslashed(const char *str, int i);
+char			*join_path(char *s, char *s1, char *s2);
 
 #endif

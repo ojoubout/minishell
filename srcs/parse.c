@@ -82,7 +82,8 @@ void		ft_parse(void)
 	{
 		if (g_minishell.command_line[g_minishell.pos] == 0)
 			break ;
-		len = ft_word_length(g_minishell.command_line + g_minishell.pos, SEP, 0);
+		len = ft_word_length(g_minishell.command_line +
+		g_minishell.pos, SEP, 0);
 		ft_precess_cmd(g_minishell.command_line + g_minishell.pos);
 		g_minishell.pos += len;
 	}

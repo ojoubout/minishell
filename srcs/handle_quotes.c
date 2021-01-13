@@ -12,20 +12,6 @@
 
 #include "minishell.h"
 
-int			ft_is_backslashed(const char *str, int i)
-{
-	int is_backslashed;
-
-	i--;
-	is_backslashed = 0;
-	while (i >= 0 && str[i] == '\\')
-	{
-		is_backslashed = !is_backslashed;
-		i--;
-	}
-	return (is_backslashed);
-}
-
 static int	ft_is_quoted(const char *str, int i)
 {
 	char	quote[2];
@@ -78,7 +64,9 @@ char		*ft_quotes_convert(char *str)
 	res = ft_strdup("");
 	while (str[i])
 	{
-		if ((!quote[0] || (quote[0] == '"' && (str[i + 1] == '\\' || str[i + 1] == '$' || str[i + 1] == '"'))) && ft_on_char(str, i, "\\") && ++i)
+		if ((!quote[0] || (quote[0] == '"' && (str[i + 1] == '\\' ||
+		str[i + 1] == '$' || str[i + 1] == '"'))) && ft_on_char(str, i, "\\")
+		&& ++i)
 			continue;
 		if ((!quote[0] && ft_on_char(str, i, "'\"")) ||
 		(quote[0] == '\'' && str[i] == '\'') || ft_on_char(str, i, quote))
@@ -91,7 +79,7 @@ char		*ft_quotes_convert(char *str)
 	return (res);
 }
 
-void	ft_split_args(t_list *lst)
+void		ft_split_args(t_list *lst)
 {
 	char	*str;
 	int		i;
@@ -107,8 +95,6 @@ void	ft_split_args(t_list *lst)
 	{
 		if (i == 0)
 		{
-			// free(tmp->content);
-			
 			tmp->content = ft_substr(str, i, len);
 		}
 		else
@@ -122,11 +108,9 @@ void	ft_split_args(t_list *lst)
 	}
 }
 
-void		ft_argv_convert_env(t_list **argv)
+void		ft_argv_convert_env(t_list **argv, t_list *prev, char *s)
 {
 	t_list	*tmp;
-	t_list	*prev;
-	char	*s;
 
 	if (!(*argv))
 		return ;

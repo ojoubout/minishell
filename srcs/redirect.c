@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 19:06:10 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/13 10:42:46 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/13 10:56:33 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void		open_redirect_files(t_command *cmd)
 	g_minishell.export = 0;
 	if (cmd->in_red != 0 || cmd->out_red != 1)
 		g_minishell.export = 1;
-
 	ft_lstiter(cmd->red_files, open_red_file, cmd);
 }
 

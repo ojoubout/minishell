@@ -6,7 +6,7 @@
 /*   By: ojoubout <ojoubout@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 17:14:39 by ojoubout          #+#    #+#             */
-/*   Updated: 2021/01/13 10:29:32 by ojoubout         ###   ########.fr       */
+/*   Updated: 2021/01/12 19:16:39 by ojoubout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ static void	ft_system_cmd(t_command *cmd, int ret, int *n)
 
 static int	ft_init_exec(t_command *cmd, int *n, char ***argv)
 {
-	// open_redirect_files(cmd);
 	if (!cmd || !cmd->argv || cmd->in_red == -1 || cmd->out_red == -1)
 		return (1);
 	if (cmd->in_red == 0)
@@ -84,7 +83,7 @@ static int	ft_init_exec(t_command *cmd, int *n, char ***argv)
 			ft_wait();
 		*n = 0;
 	}
-	ft_argv_convert_env(&cmd->argv);
+	ft_argv_convert_env(&cmd->argv, NULL, NULL);
 	*argv = ft_lst_to_array(cmd->argv);
 	return (0);
 }
